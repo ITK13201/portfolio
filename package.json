@@ -10,6 +10,11 @@
     "watch": "onchange './src/**/*.{js,jsx,ts,tsx,scss,json,css}' -- prettier --config ./.prettierrc.json --write {{changed}}"
   },
   "dependencies": {
+    "@emotion/react": "^11.8.1",
+    "@emotion/styled": "^11.8.1",
+    "@fontsource/roboto": "^4.5.3",
+    "@mui/icons-material": "^5.4.2",
+    "@mui/material": "^5.4.3",
     "next": "12.1.0",
     "onchange": "^7.1.0",
     "prettier": "^2.5.1",
