@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  padding: 10px;
+}
+
+.link {
+  text-decoration: none;
+  color: black;
+}
+
+.pcList {
+  display: block;
+}
+.spList {
+  display: inline-flex;
+}
+
+// sp display
+@media screen and (max-width: 767px) {
+  .pcList {
+    display: none;
+  }
+}
+
+// pc display
+@media screen and (min-width: 767px) {
+  .spList {
+    display: none;
+  }
+}
