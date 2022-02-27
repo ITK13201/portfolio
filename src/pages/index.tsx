@@ -4,6 +4,7 @@ import styles from 'styles/pages/Home.module.scss';
 
 // component imports
 import Navbar from 'components/home/Navbar';
+import Contact from 'components/home/Contact';
 
 const Home: NextPage = () => {
   const faviconPath = '/images/favicon';
@@ -89,8 +90,15 @@ const Home: NextPage = () => {
         </div>
       </main>
 
-      <footer className={styles.footer}>
-        <small>Copyright &copy; 2022 Takumi Ikeda. All Rights Reserved. </small>
+      <footer>
+        <section id="contact">
+          <Contact />
+        </section>
+        <div className={styles.copyright}>
+          <small>
+            Copyright &copy; 2022 Takumi Ikeda. All Rights Reserved.{' '}
+          </small>
+        </div>
       </footer>
     </div>
   );

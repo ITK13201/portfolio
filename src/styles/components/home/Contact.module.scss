@@ -1,0 +1,26 @@
+.container {
+  border-top: 1px solid #eaeaea;
+  background-color: lightblue;
+}
+
+.root {
+  display: flex;
+  & > * {
+    margin: 8px;
+  }
+}
+
+.green {
+  color: #fff;
+  background-color: #4caf50;
+}
+
+.blue {
+  color: #fff;
+  background-color: #2196f3;
+}
+
+.purple {
+  color: #fff;
+  background-color: #9c27b0;
+}
