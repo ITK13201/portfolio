@@ -14,13 +14,14 @@
 
 .pcList {
   display: block;
+  margin: auto;
 }
 .spList {
   display: inline-flex;
 }
 
 // sp display
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 599px) {
   .pcList {
     display: none;
   }
