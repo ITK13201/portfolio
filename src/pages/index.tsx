@@ -1,9 +1,10 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import styles from 'styles/pages/Home.module.scss';
+import styles from 'assets/styles/pages/Home.module.scss';
 
 // component imports
 import Navbar from 'components/home/Navbar';
+import EyeCatch from 'components/home/EyeCatch';
 import Contact from 'components/home/Contact';
 
 const Home: NextPage = () => {
@@ -50,9 +51,7 @@ const Home: NextPage = () => {
       </header>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <EyeCatch />
 
         <p className={styles.description}>
           Get started by editing{' '}
@@ -96,7 +95,7 @@ const Home: NextPage = () => {
         </section>
         <div className={styles.copyright}>
           <small>
-            Copyright &copy; 2022 Takumi Ikeda. All Rights Reserved.{' '}
+            Copyright &copy; 2022 Takumi Ikeda. All Rights Reserved.
           </small>
         </div>
       </footer>

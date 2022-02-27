@@ -1,0 +1,32 @@
+.root {
+  display: flex;
+  padding: 0;
+}
+
+.avatarContainer {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.avatar {
+  width: 256px;
+  height: 256px;
+}
+
+.whoami {
+  margin: auto 40px;
+  padding: 20px 0;
+  display: block;
+  text-align: center;
+  vertical-align: center;
+}
+
+@media screen and (max-width: 600px) {
+  .root {
+    display: block;
+  }
+  .whoami {
+    margin: auto 0;
+  }
+}

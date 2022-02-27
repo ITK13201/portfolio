@@ -1,0 +1,53 @@
+.wrapper {
+  border-top: 1px solid #eaeaea;
+  background-color: lightblue;
+  padding: 20px;
+}
+
+.caption {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 1px;
+  & > * {
+    margin: 8px;
+  }
+}
+
+.email {
+  color: #fff;
+  background-color: #4caf50;
+  &:hover,
+  &:focus,
+  &:active {
+    color: #4caf50;
+    background-color: #fff;
+  }
+}
+
+.twitter {
+  color: #fff;
+  background-color: #2196f3;
+  &:hover,
+  &:focus,
+  &:active {
+    color: #2196f3;
+    background-color: #fff;
+  }
+}
+
+.github {
+  color: #fff;
+  background-color: #9c27b0;
+  &:hover,
+  &:focus,
+  &:active {
+    color: #9c27b0;
+    background-color: #fff;
+  }
+}

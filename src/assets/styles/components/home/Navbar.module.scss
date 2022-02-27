@@ -20,14 +20,14 @@
 }
 
 // sp display
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 600px) {
   .pcList {
     display: none;
   }
 }
 
 // pc display
-@media screen and (min-width: 767px) {
+@media screen and (min-width: 600px) {
   .spList {
     display: none;
   }

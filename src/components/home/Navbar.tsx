@@ -13,7 +13,7 @@ import {
   MenuItem,
 } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
-import styles from 'styles/components/home/Navbar.module.scss';
+import styles from 'assets/styles/components/home/Navbar.module.scss';
 
 interface navbarElement {
   href: string;

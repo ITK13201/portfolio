@@ -5,17 +5,17 @@ import {
   Twitter as TwitterIcon,
   GitHub as GithubIcon,
 } from '@mui/icons-material';
-import styles from 'styles/components/home/Contact.module.scss';
+import styles from 'assets/styles/components/home/Contact.module.scss';
 
 const Contact: React.FC = () => {
   return (
-    <Box p={2} className={styles.container}>
-      <Box display="flex" justifyContent="center" p={1}>
+    <Box className={styles.wrapper}>
+      <Box className={styles.caption}>
         <Typography variant="h5" color="initial">
           Contact
         </Typography>
       </Box>
-      <Box className={styles.root} display="flex" justifyContent="center" p={1}>
+      <Box className={styles.container}>
         <Link
           href="mailto:tkik2236@gmail.com?subject=Hello"
           color="inherit"
@@ -23,7 +23,7 @@ const Contact: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Avatar className={styles.green}>
+          <Avatar className={styles.email}>
             <MailIcon />
           </Avatar>
         </Link>
@@ -34,7 +34,7 @@ const Contact: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Avatar className={styles.blue}>
+          <Avatar className={styles.twitter}>
             <TwitterIcon />
           </Avatar>
         </Link>
@@ -45,7 +45,7 @@ const Contact: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Avatar className={styles.purple}>
+          <Avatar className={styles.github}>
             <GithubIcon />
           </Avatar>
         </Link>
