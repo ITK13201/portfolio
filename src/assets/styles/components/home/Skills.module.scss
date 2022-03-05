@@ -1,0 +1,26 @@
+.root {
+  padding: 2rem 1rem;
+  background-color: lightgrey;
+}
+
+.caption {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.wrapper {
+  display: block;
+  align-content: center;
+  padding: 1rem 10%;
+}
+
+.container {
+  padding: 1rem 0;
+}
+
+.secondCaption {
+  margin: 1rem;
+  padding: 1rem 2rem;
+  border-left: 4px solid #000;
+}

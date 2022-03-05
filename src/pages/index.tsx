@@ -7,6 +7,7 @@ import Header from 'components/home/Header';
 import EyeCatch from 'components/home/EyeCatch';
 import About from 'components/home/About';
 import Contact from 'components/home/Contact';
+import Skills from 'components/home/Skills';
 
 const Home: NextPage = () => {
   const faviconPath = '/images/favicon';
@@ -53,6 +54,9 @@ const Home: NextPage = () => {
         <EyeCatch />
         <section id="about">
           <About />
+        </section>
+        <section id="skills">
+          <Skills />
         </section>
 
         <p className={styles.description}>
