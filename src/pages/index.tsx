@@ -3,7 +3,7 @@ import Head from 'next/head';
 import styles from 'assets/styles/pages/Home.module.scss';
 
 // component imports
-import Navbar from 'components/home/Navbar';
+import Header from 'components/home/Header';
 import EyeCatch from 'components/home/EyeCatch';
 import Contact from 'components/home/Contact';
 
@@ -46,12 +46,10 @@ const Home: NextPage = () => {
         <meta name="theme-color" content="#ffffff" />
       </Head>
 
-      <header>
-        <Navbar />
-      </header>
+      <Header />
 
       <main className={styles.main}>
-        <EyeCatch />
+        <EyeCatch className={styles.content} />
 
         <p className={styles.description}>
           Get started by editing{' '}
@@ -91,7 +89,7 @@ const Home: NextPage = () => {
 
       <footer>
         <section id="contact">
-          <Contact />
+          <Contact className={styles.content} />
         </section>
         <div className={styles.copyright}>
           <small>

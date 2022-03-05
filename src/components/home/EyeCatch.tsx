@@ -5,7 +5,7 @@ import ImageFile from 'assets/images/components/home/avatar.jpg';
 import styles from 'assets/styles/components/home/EyeCatch.module.scss';
 import { CustomMaterialTheme } from 'hooks/theme';
 
-const EyeCatch: React.FC = () => {
+const EyeCatch = (): JSX.Element => {
   return (
     <ThemeProvider theme={CustomMaterialTheme}>
       <Box className={styles.root}>

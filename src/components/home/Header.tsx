@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
 import {
   AppBar,
@@ -14,7 +14,7 @@ import {
   ThemeProvider,
 } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
-import styles from 'assets/styles/components/home/Navbar.module.scss';
+import styles from 'assets/styles/components/home/Header.module.scss';
 import { CustomMaterialTheme } from 'hooks/theme';
 
 interface navbarElement {
@@ -51,7 +51,7 @@ const navbarElements: navbarElement[] = [
   },
 ];
 
-const SpNavbarList: React.FC = () => {
+const SpNavbar = (): JSX.Element => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event: any) => {
@@ -104,7 +104,7 @@ const SpNavbarList: React.FC = () => {
   );
 };
 
-const PcNavbarList: React.FC = () => {
+const PcNavbar = (): JSX.Element => {
   return (
     <div className={styles.pcList}>
       <List>
@@ -134,7 +134,7 @@ const PcNavbarList: React.FC = () => {
   );
 };
 
-const Navbar: React.FC = () => {
+const Header = (): JSX.Element => {
   return (
     <ThemeProvider theme={CustomMaterialTheme}>
       <AppBar color="default" position="static">
@@ -143,14 +143,14 @@ const Navbar: React.FC = () => {
             <Box>
               <Typography variant="h2" color="initial" className={styles.title}>
                 <Link href="/" color="inherit" underline="none">
-                  <strong>Portfolio</strong>
+                  Portfolio
                 </Link>
               </Typography>
             </Box>
             {/*display if sp screen width*/}
-            <SpNavbarList />
+            <SpNavbar />
             {/*display if pc screen width*/}
-            <PcNavbarList />
+            <PcNavbar />
           </Container>
         </Toolbar>
       </AppBar>
@@ -158,4 +158,4 @@ const Navbar: React.FC = () => {
   );
 };
 
-export default Navbar;
+export default Header;
