@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, ThemeProvider, Typography } from '@mui/material';
-import { CustomMaterialTheme } from 'hooks/theme';
 import styles from 'assets/styles/components/home/Skills.module.scss';
 import { SkillBarSkill } from 'react-skillbars';
 import { NoSsr } from '@mui/base';
@@ -142,35 +141,33 @@ const dbColors = {
 const Skills = () => {
   return (
     <NoSsr>
-      <ThemeProvider theme={CustomMaterialTheme}>
-        <Box className={styles.root}>
-          <Box className={styles.caption}>
-            <Typography variant="h2" color="initial">
-              <strong>Skills</strong>
+      <Box className={styles.root}>
+        <Box className={styles.caption}>
+          <Typography variant="h2" color="initial">
+            <strong>Skills</strong>
+          </Typography>
+        </Box>
+        <Box className={styles.wrapper}>
+          <Box className={styles.container}>
+            <Typography variant="h3" className={styles.secondCaption}>
+              Languages
             </Typography>
+            <SkillBar skills={languageSkills} />
           </Box>
-          <Box className={styles.wrapper}>
-            <Box className={styles.container}>
-              <Typography variant="h3" className={styles.secondCaption}>
-                Languages
-              </Typography>
-              <SkillBar skills={languageSkills} />
-            </Box>
-            <Box className={styles.container}>
-              <Typography variant="h3" className={styles.secondCaption}>
-                Frameworks and Technologies
-              </Typography>
-              <SkillBar skills={techSkills} colors={techColors} />
-            </Box>
-            <Box className={styles.container}>
-              <Typography variant="h3" className={styles.secondCaption}>
-                Databases
-              </Typography>
-              <SkillBar skills={dbSkills} colors={dbColors} />
-            </Box>
+          <Box className={styles.container}>
+            <Typography variant="h3" className={styles.secondCaption}>
+              Frameworks and Technologies
+            </Typography>
+            <SkillBar skills={techSkills} colors={techColors} />
+          </Box>
+          <Box className={styles.container}>
+            <Typography variant="h3" className={styles.secondCaption}>
+              Databases
+            </Typography>
+            <SkillBar skills={dbSkills} colors={dbColors} />
           </Box>
         </Box>
-      </ThemeProvider>
+      </Box>
     </NoSsr>
   );
 };

@@ -4,7 +4,7 @@ import { AppProps } from 'next/app';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
-import {CustomMaterialTheme} from 'hooks/theme';
+import { theme } from 'components/theme/theme';
 import createEmotionCache from 'hooks/createEmotionCache';
 
 // roboto font imports
@@ -32,7 +32,10 @@ export default function MyApp(props: MyAppProps) {
         <meta name="description" content="Takumi Ikeda's Portfolio" />
 
         <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
+        />
 
         {/*favicon settings*/}
         <link
@@ -61,7 +64,7 @@ export default function MyApp(props: MyAppProps) {
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
       </Head>
-      <ThemeProvider theme={CustomMaterialTheme}>
+      <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <Component {...pageProps} />

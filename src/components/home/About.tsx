@@ -16,7 +16,6 @@ import {
   EmojiEvents as EmojiEventsIcon,
 } from '@mui/icons-material';
 import styles from 'assets/styles/components/home/About.module.scss';
-import { CustomMaterialTheme } from '../../hooks/theme';
 import Nl2br from 'components/design/Nl2br';
 
 interface AboutElement {
@@ -57,34 +56,32 @@ const AboutElements: AboutElement[] = [
 
 const About = (): JSX.Element => {
   return (
-    <ThemeProvider theme={CustomMaterialTheme}>
-      <Box className={styles.root}>
-        <Box className={styles.caption}>
-          <Typography variant="h2" color="initial">
-            <strong>About</strong>
-          </Typography>
-        </Box>
-        <Box className={styles.container}>
-          {AboutElements.map((element: AboutElement) => (
-            <Card className={styles.card} key={element.title}>
-              <CardContent>
-                <Box display="flex">
-                  <Avatar>
-                    <element.titleIcon />
-                  </Avatar>
-                  <Typography variant="h3" padding="5px">
-                    {element.title}
-                  </Typography>
-                </Box>
-                <p>
-                  <Nl2br>{element.description}</Nl2br>
-                </p>
-              </CardContent>
-            </Card>
-          ))}
-        </Box>
+    <Box className={styles.root}>
+      <Box className={styles.caption}>
+        <Typography variant="h2" color="initial">
+          <strong>About</strong>
+        </Typography>
       </Box>
-    </ThemeProvider>
+      <Box className={styles.container}>
+        {AboutElements.map((element: AboutElement) => (
+          <Card className={styles.card} key={element.title}>
+            <CardContent>
+              <Box display="flex">
+                <Avatar>
+                  <element.titleIcon />
+                </Avatar>
+                <Typography variant="h3" padding="5px">
+                  {element.title}
+                </Typography>
+              </Box>
+              <p>
+                <Nl2br>{element.description}</Nl2br>
+              </p>
+            </CardContent>
+          </Card>
+        ))}
+      </Box>
+    </Box>
   );
 };
 

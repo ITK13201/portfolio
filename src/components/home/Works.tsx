@@ -1,4 +1,3 @@
-import { CustomMaterialTheme } from 'hooks/theme';
 import {
   Avatar,
   Box,
@@ -93,38 +92,36 @@ const worksElements: worksElement[] = [
 
 const Works = (): JSX.Element => {
   return (
-    <ThemeProvider theme={CustomMaterialTheme}>
-      <Box className={styles.root}>
-        <Box className={styles.caption}>
-          <Typography variant="h2" color="initial">
-            <strong>Works</strong>
-          </Typography>
-        </Box>
-        <Box className={styles.container}>
-          <List className={styles.list}>
-            {worksElements.map((element: worksElement) => (
-              <ListItem key={element.title}>
-                <Card className={styles.contentCard}>
-                  <ListItemLink
-                    href={element.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <ListItemAvatar>
-                      <Avatar src={element.img.src} />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={element.title}
-                      secondary={element.description}
-                    />
-                  </ListItemLink>
-                </Card>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
+    <Box className={styles.root}>
+      <Box className={styles.caption}>
+        <Typography variant="h2" color="initial">
+          <strong>Works</strong>
+        </Typography>
       </Box>
-    </ThemeProvider>
+      <Box className={styles.container}>
+        <List className={styles.list}>
+          {worksElements.map((element: worksElement) => (
+            <ListItem key={element.title}>
+              <Card className={styles.contentCard}>
+                <ListItemLink
+                  href={element.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ListItemAvatar>
+                    <Avatar src={element.img.src} />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={element.title}
+                    secondary={element.description}
+                  />
+                </ListItemLink>
+              </Card>
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+    </Box>
   );
 };
 

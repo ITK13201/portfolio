@@ -15,7 +15,6 @@ import {
 } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import styles from 'assets/styles/components/home/Header.module.scss';
-import { CustomMaterialTheme } from 'hooks/theme';
 
 interface navbarElement {
   href: string;
@@ -136,25 +135,23 @@ const PcNavbar = (): JSX.Element => {
 
 const Header = (): JSX.Element => {
   return (
-    <ThemeProvider theme={CustomMaterialTheme}>
-      <AppBar color="default" position="static">
-        <Toolbar>
-          <Container maxWidth="md" className={styles.container}>
-            <Box>
-              <Typography variant="h2" color="initial" className={styles.title}>
-                <Link href="/" color="inherit" underline="none">
-                  Portfolio
-                </Link>
-              </Typography>
-            </Box>
-            {/*display if sp screen width*/}
-            <SpNavbar />
-            {/*display if pc screen width*/}
-            <PcNavbar />
-          </Container>
-        </Toolbar>
-      </AppBar>
-    </ThemeProvider>
+    <AppBar color="default" position="static">
+      <Toolbar>
+        <Container maxWidth="md" className={styles.container}>
+          <Box>
+            <Typography variant="h2" color="initial" className={styles.title}>
+              <Link href="/" color="inherit" underline="none">
+                Portfolio
+              </Link>
+            </Typography>
+          </Box>
+          {/*display if sp screen width*/}
+          <SpNavbar />
+          {/*display if pc screen width*/}
+          <PcNavbar />
+        </Container>
+      </Toolbar>
+    </AppBar>
   );
 };
 
