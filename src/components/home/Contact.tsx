@@ -1,10 +1,6 @@
 import React from 'react';
-import { Box, Typography, Link, Avatar, ThemeProvider } from '@mui/material';
-import {
-  Mail as MailIcon,
-  Twitter as TwitterIcon,
-  GitHub as GithubIcon,
-} from '@mui/icons-material';
+import { Avatar, Box, Link, Typography } from '@mui/material';
+import { GitHub as GithubIcon, Mail as MailIcon, Twitter as TwitterIcon } from '@mui/icons-material';
 import styles from 'assets/styles/components/home/Contact.module.scss';
 
 const Contact = (): JSX.Element => {

@@ -1,19 +1,12 @@
 import React from 'react';
+import { Avatar, Box, Card, CardContent, Typography } from '@mui/material';
 import {
-  Box,
-  ThemeProvider,
-  Typography,
-  Card,
-  CardContent,
-  Avatar,
-} from '@mui/material';
-import {
-  SvgIconComponent,
-  School as SchoolIcon,
-  Engineering as EngineeringIcon,
-  LocalActivity as LocalActivityIcon,
-  Interests as InterestsIcon,
   EmojiEvents as EmojiEventsIcon,
+  Engineering as EngineeringIcon,
+  Interests as InterestsIcon,
+  LocalActivity as LocalActivityIcon,
+  School as SchoolIcon,
+  SvgIconComponent,
 } from '@mui/icons-material';
 import styles from 'assets/styles/components/home/About.module.scss';
 import Nl2br from 'components/design/Nl2br';

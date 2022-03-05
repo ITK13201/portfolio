@@ -1,16 +1,14 @@
 import {
   Avatar,
   Box,
-  ThemeProvider,
-  Typography,
+  Card,
   List,
   ListItem,
   ListItemAvatar,
-  ListItemText,
   ListItemProps,
-  Card,
+  ListItemText,
+  Typography,
 } from '@mui/material';
-import { Folder as FolderIcon } from '@mui/icons-material';
 import styles from 'assets/styles/components/home/Works.module.scss';
 import React from 'react';
 

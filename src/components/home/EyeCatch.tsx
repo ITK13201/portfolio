@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Avatar, Typography } from '@mui/material';
+import { Avatar, Box, Typography } from '@mui/material';
 
 import ImageFile from 'assets/images/avatar.jpg';
 import styles from 'assets/styles/components/home/EyeCatch.module.scss';

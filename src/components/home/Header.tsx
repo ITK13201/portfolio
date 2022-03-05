@@ -1,18 +1,6 @@
 import React from 'react';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
-import {
-  AppBar,
-  Toolbar,
-  Button,
-  Typography,
-  Container,
-  List,
-  Box,
-  Link,
-  Menu,
-  MenuItem,
-  ThemeProvider,
-} from '@mui/material';
+import { AppBar, Box, Button, Container, Link, List, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import styles from 'assets/styles/components/home/Header.module.scss';
 

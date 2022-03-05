@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, ThemeProvider, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import styles from 'assets/styles/components/home/Skills.module.scss';
 import { SkillBarSkill } from 'react-skillbars';
 import { NoSsr } from '@mui/base';
