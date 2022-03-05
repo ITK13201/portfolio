@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Avatar, Typography, ThemeProvider } from '@mui/material';
 
-import ImageFile from 'assets/images/components/home/avatar.jpg';
+import ImageFile from 'assets/images/avatar.jpg';
 import styles from 'assets/styles/components/home/EyeCatch.module.scss';
 import { CustomMaterialTheme } from 'hooks/theme';
 

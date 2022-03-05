@@ -1,0 +1,32 @@
+.root {
+  padding: 2rem 1rem;
+}
+
+.caption {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.list {
+  width: 80%;
+  max-width: 80%;
+}
+
+@media (max-width: 599px) {
+  .list {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.contentCard {
+  width: 100%;
+  max-width: 100%;
+}

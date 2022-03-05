@@ -55,7 +55,7 @@ const AboutElements: AboutElement[] = [
   },
 ];
 
-const About = () => {
+const About = (): JSX.Element => {
   return (
     <ThemeProvider theme={CustomMaterialTheme}>
       <Box className={styles.root}>
