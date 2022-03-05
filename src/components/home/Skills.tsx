@@ -6,7 +6,7 @@ import { SkillBarSkill } from 'react-skillbars';
 import { NoSsr } from '@mui/base';
 import dynamic from 'next/dynamic';
 
-const SkillBar = dynamic(() => import('react-skillbars'));
+const SkillBar = dynamic(() => import('react-skillbars'), { ssr: false });
 
 const languageSkills: SkillBarSkill[] = [
   {
