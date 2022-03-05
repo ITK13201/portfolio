@@ -5,6 +5,7 @@ import styles from 'assets/styles/pages/Home.module.scss';
 // component imports
 import Header from 'components/home/Header';
 import EyeCatch from 'components/home/EyeCatch';
+import About from 'components/home/About';
 import Contact from 'components/home/Contact';
 
 const Home: NextPage = () => {
@@ -49,7 +50,10 @@ const Home: NextPage = () => {
       <Header />
 
       <main className={styles.main}>
-        <EyeCatch className={styles.content} />
+        <EyeCatch />
+        <section id="about">
+          <About />
+        </section>
 
         <p className={styles.description}>
           Get started by editing{' '}
@@ -89,7 +93,7 @@ const Home: NextPage = () => {
 
       <footer>
         <section id="contact">
-          <Contact className={styles.content} />
+          <Contact />
         </section>
         <div className={styles.copyright}>
           <small>

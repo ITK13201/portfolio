@@ -16,7 +16,13 @@ export const CustomMaterialTheme = createTheme({
         fontSize: '1.5rem',
       },
     },
-    h3: undefined,
+    h3: {
+      fontSize: '1.5rem',
+      fontWeight: 400,
+      '@media screen and (max-width: 599px)': {
+        fontSize: '1.3rem',
+      },
+    },
     h4: undefined,
     h5: undefined,
   },

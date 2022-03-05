@@ -1,0 +1,43 @@
+.root {
+  padding: 2rem 1rem;
+}
+
+.caption {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.container {
+  display: inline-flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 0;
+  & > * {
+    margin: 8px;
+  }
+}
+
+.belongto {
+}
+
+.card {
+  width: 40%;
+  max-width: 100%;
+  align-content: center;
+}
+
+@media (max-width: 599px) {
+  .container {
+    flex-direction: column;
+  }
+  .card {
+    width: 80%;
+    margin: 8px auto;
+  }
+}
+
+.cardTitle {
+  padding: 5px;
+}
