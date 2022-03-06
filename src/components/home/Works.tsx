@@ -52,7 +52,7 @@ const worksElements: worksElement[] = [
     img: PythonImage,
   },
   {
-    href: '',
+    href: 'https://github.com/ITK13201/portfolio',
     title: 'Portfolio',
     description:
       '現在ご覧のこのポートフォリオです．Next.jsを使って作成しました．',
