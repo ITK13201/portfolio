@@ -62,7 +62,7 @@ const worksElements: worksElement[] = [
     href: 'https://github.com/ITK13201/waseda-moodle-scheduler',
     title: 'Waseda Moodle Scheduler',
     description:
-      '早稲田大学ではMoodleというWebサービスを授業支援として用いいており，その中に課題の締切などが登録されるカレンダー機能があります．そのカレンダー機能を利用してDiscordサーバに通知を送ることで締め切り釣果を防ぐWebAPIアプリケーションです．Djangoで作成しました．',
+      '早稲田大学ではMoodleというWebサービスを授業支援として用いており，その中に課題の締切などが登録されるカレンダー機能があります．そのカレンダー機能を利用してDiscordサーバに通知を送ることで締め切り超過を防ぐWebAPIアプリケーションです．Djangoで作成しました．',
     img: PythonImage,
   },
   {
@@ -83,7 +83,7 @@ const worksElements: worksElement[] = [
     href: 'https://github.com/ITK13201/holodule-bot',
     title: 'Holodule Bot',
     description:
-      'ホロライブというVirtual YouTuber事務所の配信スケジュールをWebサイトからスクレイピングにより取得し，Dsicordサーバーに通知する趣味用アプリケーションです．Go言語で作成しました．',
+      'ホロライブというVirtual YouTuber事務所の配信スケジュールをWebサイトからスクレイピングにより取得し，Discordサーバーに通知する趣味用アプリケーションです．Go言語で作成しました．',
     img: GolangImage,
   },
 ];

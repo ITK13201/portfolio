@@ -21,7 +21,7 @@ const AboutElements: AboutElement[] = [
   {
     title: 'Belong To',
     titleIcon: SchoolIcon,
-    description: '早稲田大学基幹理工学部情報理工学科（2019〜2023卒業予定）',
+    description: '早稲田大学基幹理工学部情報理工学科（2019年〜2023年卒業予定）',
   },
   {
     title: 'Wanna be',
