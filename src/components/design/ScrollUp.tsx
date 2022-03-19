@@ -8,7 +8,9 @@ const ScrollUp = (): JSX.Element => {
       smooth
       style={{
         borderRadius: '50%',
-        textAlign: 'center'
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
       }}
       component={<KeyboardArrowUpIcon />}
     />
