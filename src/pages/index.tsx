@@ -8,6 +8,7 @@ import About from 'components/home/About';
 import Skills from 'components/home/Skills';
 import Works from 'components/home/Works';
 import Contact from 'components/home/Contact';
+import ScrollUp from 'components/design/ScrollUp';
 
 const Home: NextPage = () => {
   const faviconPath = '/images/favicon';
@@ -42,6 +43,8 @@ const Home: NextPage = () => {
           </small>
         </div>
       </footer>
+
+      <ScrollUp />
     </div>
   );
 };
