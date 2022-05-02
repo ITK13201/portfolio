@@ -5,7 +5,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import { theme } from 'components/theme/theme';
-import createEmotionCache from 'components/utils/createEmotionCache';
+import createEmotionCache from 'lib/createEmotionCache';
 
 // roboto font imports
 import '@fontsource/roboto/300.css';
