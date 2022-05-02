@@ -56,6 +56,7 @@ export const GoogleAnalytics = () => (
           defer
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="afterInteractive"
+          id="gtag-script"
         />
         <Script
           defer
@@ -68,6 +69,7 @@ export const GoogleAnalytics = () => (
             `,
           }}
           strategy="afterInteractive"
+          id="gtag-fire-script"
         />
       </>
     )}
