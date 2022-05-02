@@ -17,22 +17,26 @@
     "@mui/icons-material": "^5.6.0",
     "@mui/material": "^5.6.0",
     "@mui/styles": "^5.6.0",
-    "next": "12.1.4",
+    "next": "12.1.5",
     "onchange": "^7.1.0",
     "prettier": "^2.6.2",
-    "react": "17.0.2",
+    "react": "18.1.0",
     "react-anchor-link-smooth-scroll": "^1.0.12",
-    "react-dom": "17.0.2",
+    "react-dom": "18.1.0",
     "react-responsive": "^9.0.0-beta.6",
     "react-scroll-to-top": "^1.0.8",
-    "react-skillbars": "^1.6.1",
+    "react-skillbars": "^2.0.1",
     "sass": "^1.49.11"
   },
   "devDependencies": {
-    "@types/node": "17.0.23",
-    "@types/react": "17.0.43",
-    "eslint": "8.12.0",
-    "eslint-config-next": "12.1.4",
-    "typescript": "4.6.3"
-  }
+    "@types/node": "17.0.31",
+    "@types/react": "18.0.8",
+    "eslint": "8.14.0",
+    "eslint-config-next": "12.1.5",
+    "typescript": "4.6.4"
+  },
+  "main": "index.js",
+  "repository": "git@github.com:ITK13201/portfolio.git",
+  "author": "Takumi Ikeda <tkik13201@gmail.com>",
+  "license": "MIT"
 }
