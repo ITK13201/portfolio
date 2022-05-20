@@ -2,7 +2,7 @@
 
 package runtime
 
-// The schema-stitching logic is generated in github.com/ITK13201/gin-ent-sample/ent/runtime.go
+// The schema-stitching logic is generated in github.com/ITK13201/portfolio/backend/ent/runtime.go
 
 const (
 	Version = "v0.9.1"                                          // Version of ent codegen.

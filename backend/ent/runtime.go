@@ -5,8 +5,8 @@ package ent
 import (
 	"time"
 
-	"github.com/ITK13201/gin-ent-sample/ent/schema"
-	"github.com/ITK13201/gin-ent-sample/ent/user"
+	"github.com/ITK13201/portfolio/backend/ent/schema"
+	"github.com/ITK13201/portfolio/backend/ent/user"
 )
 
 // The init function reads all schema descriptors with runtime code

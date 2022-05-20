@@ -9,10 +9,10 @@ import (
 )
 
 type Config struct {
-	Debug       bool   `json:"debug" default:"false"`
-	DatabaseUrl string `json:"database-url" required:"true"`
-	DatabaseDsn string `json:"database-dsn" ignored:"true"`
-	Port        int    `json:"port" required:"true"`
+	Debug       bool   `json:"debug" default:"false" envconfig:"DEBUG"`
+	DatabaseUrl string `json:"database-url" required:"true" envconfig:"DATABASE_URL"`
+	Dsn         string `json:"dsn" ignored:"true"`
+	Port        int    `json:"port" required:"true" envconfig:"PORT"`
 }
 
 var Cfg *Config
@@ -22,23 +22,28 @@ var UTC *time.Location
 func LoadConfig() (*Config, error) {
 	var cfg Config
 	err := envconfig.Process("", &cfg)
-
-	db, err := dburl.Parse(cfg.DatabaseUrl)
-	if err != nil {
-		log.Fatal(err)
-	}
-	cfg.DatabaseDsn = db.DSN
-
 	return &cfg, err
+}
+
+func AddDsn(cfg *Config) (*Config, error) {
+	db, err := dburl.Parse(cfg.DatabaseUrl)
+	cfg.Dsn = db.DSN
+	return cfg, err
 }
 
 func init() {
 	var err error
+	var cfg *Config
 
-	Cfg, err = LoadConfig()
+	cfg, err = LoadConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
+	cfg, err = AddDsn(cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+	Cfg = cfg
 
 	JST, err = time.LoadLocation("Asia/Tokyo")
 	if err != nil {

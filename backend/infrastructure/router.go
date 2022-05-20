@@ -1,7 +1,7 @@
 package infrastructure
 
 import (
-	"github.com/ITK13201/gin-ent-sample/interfaces/controllers"
+	"github.com/ITK13201/portfolio/backend/interfaces/controllers"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )

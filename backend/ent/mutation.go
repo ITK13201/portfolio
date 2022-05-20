@@ -8,8 +8,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ITK13201/gin-ent-sample/ent/predicate"
-	"github.com/ITK13201/gin-ent-sample/ent/user"
+	"github.com/ITK13201/portfolio/backend/ent/predicate"
+	"github.com/ITK13201/portfolio/backend/ent/user"
 
 	"entgo.io/ent"
 )

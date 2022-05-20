@@ -4,7 +4,7 @@ import (
 	"context"
 	"strconv"
 
-	"github.com/ITK13201/gin-ent-sample/ent"
+	"github.com/ITK13201/portfolio/backend/ent"
 	"github.com/gin-gonic/gin"
 )
 

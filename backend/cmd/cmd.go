@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/ITK13201/gin-ent-sample/config"
-	"github.com/ITK13201/gin-ent-sample/infrastructure"
+	"github.com/ITK13201/portfolio/backend/config"
+	"github.com/ITK13201/portfolio/backend/infrastructure"
 )
 
 func Run() {

@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ITK13201/gin-ent-sample/ent"
+	"github.com/ITK13201/portfolio/backend/ent"
 )
 
 // The UserFunc type is an adapter to allow the use of ordinary

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# define parameters
-MIGRATION_DIR=/app/migrations
+# ====================== DEFINE PARAMETERS ===============================
+MIGRATION_DIR=/backend/migrations
 DRIVER=mysql
-
+# =========================================================================
 
 ONE_ARGS_COMMANDS=("up" "up-by-one" "down" "redo" "reset" "status" "version")
 TWO_ARGS_COMMANDS=("up-to" "down-to")
@@ -38,7 +38,7 @@ function execute () {
         flag=0
         for i in "${!ONE_ARGS_COMMANDS[@]}"; do
             if [ "${ONE_ARGS_COMMANDS[$i]}" = "$1" ]; then
-                goose -dir $MIGRATION_DIR $DRIVER "$DATABASE_DSN" "$1"
+                goose -dir $MIGRATION_DIR $DRIVER "$DSN" "$1"
                 flag=1
             fi
         done
@@ -50,7 +50,7 @@ function execute () {
         flag=0
         for i in "${!TWO_ARGS_COMMANDS[@]}"; do
             if [ "${TWO_ARGS_COMMANDS[$i]}" = "$1" ]; then
-                goose -dir $MIGRATION_DIR $DRIVER "$DATABASE_DSN" "$1" "$2"
+                goose -dir $MIGRATION_DIR $DRIVER "$DSN" "$1" "$2"
                 flag=1
             fi
         done
@@ -66,5 +66,5 @@ function execute () {
     return 0
 }
 
-DATABASE_DSN=$(dburl2dsn)
+DSN=$(dburl2dsn)
 execute "$@"

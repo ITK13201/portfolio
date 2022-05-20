@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/ITK13201/gin-ent-sample/ent/user"
+	"github.com/ITK13201/portfolio/backend/ent/user"
 )
 
 // User is the model entity for the User schema.

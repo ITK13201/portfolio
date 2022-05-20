@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/ITK13201/gin-ent-sample/ent/migrate"
+	"github.com/ITK13201/portfolio/backend/ent/migrate"
 
-	"github.com/ITK13201/gin-ent-sample/ent/user"
+	"github.com/ITK13201/portfolio/backend/ent/user"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
