@@ -5,12 +5,14 @@ import (
 	"time"
 
 	"github.com/kelseyhightower/envconfig"
+	"github.com/xo/dburl"
 )
 
 type Config struct {
-	Debug       bool   `json:debug envconfig:"DEBUG"`
-	DatabaseDsn string `json:"database-dsn" envconfig:"DATABASE_DSN" required:"true"`
-	Port        int    `json:"port" envconfig:"PORT" required:"true"`
+	Debug       bool   `json:"debug" default:"false"`
+	DatabaseUrl string `json:"database-url" required:"true"`
+	DatabaseDsn string `json:"database-dsn" ignored:"true"`
+	Port        int    `json:"port" required:"true"`
 }
 
 var Cfg *Config
@@ -20,6 +22,12 @@ var UTC *time.Location
 func LoadConfig() (*Config, error) {
 	var cfg Config
 	err := envconfig.Process("", &cfg)
+
+	db, err := dburl.Parse(cfg.DatabaseUrl)
+	if err != nil {
+		log.Fatal(err)
+	}
+	cfg.DatabaseDsn = db.DSN
 
 	return &cfg, err
 }
