@@ -5,7 +5,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import { theme } from 'components/theme/theme';
-import createEmotionCache from 'components/utils/createEmotionCache';
+import createEmotionCache from 'lib/createEmotionCache';
+import { GoogleAnalytics, usePageView } from 'lib/gtag';
 
 // roboto font imports
 import '@fontsource/roboto/300.css';
@@ -23,6 +24,8 @@ interface MyAppProps extends AppProps {
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const faviconPath = '/images/favicon';
+
+  usePageView();
 
   return (
     <CacheProvider value={emotionCache}>
@@ -67,6 +70,7 @@ export default function MyApp(props: MyAppProps) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
+        <GoogleAnalytics />
         <Component {...pageProps} />
       </ThemeProvider>
     </CacheProvider>
