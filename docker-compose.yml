@@ -40,6 +40,7 @@ services:
         env_file: ./frontend/.env
         volumes:
             - ./frontend:/frontend
+            - node_modules:/frontend/node_modules
         ports:
             - 3000:3000
         environment:
@@ -66,5 +67,7 @@ services:
             - ./log/mysql:/var/log/mysql
 
 volumes:
+    node_modules:
+        driver: local
     mysql:
         driver: local

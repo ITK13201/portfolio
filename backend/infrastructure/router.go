@@ -1,33 +1,35 @@
 package infrastructure
 
 import (
-	"github.com/ITK13201/portfolio/backend/interfaces/controllers"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
-func InitRouter() *gin.Engine {
-	router := gin.Default()
-
-	ginCfg := cors.DefaultConfig()
-	ginCfg.AllowOrigins = []string{"*"}
-	router.Use(cors.New(ginCfg))
-
-	sqlClient := NewSqlClient()
-
+func InitRouter(app *Application, router *gin.Engine) {
 	v1 := router.Group("/api/v1")
 	{
-		user := v1.Group("/users")
+		// ping: always return 200 OK
+		v1.GET("/ping", func(c *gin.Context) {
+			c.String(http.StatusOK, "pong")
+		})
+		// authentication endpoints
+		auth := v1.Group("/auth")
 		{
-			userController := controllers.NewUserController(sqlClient)
-			user.POST("", func(c *gin.Context) { userController.Create(c) })
-			user.GET(":id", func(c *gin.Context) { userController.GetByID(c) })
-			user.GET("", func(c *gin.Context) { userController.GetAll(c) })
-			user.PUT(":id", func(c *gin.Context) { userController.Update(c) })
-			user.DELETE(":id", func(c *gin.Context) { userController.Delete(c) })
+			auth.POST("/login", app.AuthMiddleware.LoginHandler)
+			auth.POST("/refresh_token", app.AuthMiddleware.RefreshHandler)
+		}
+		// users endpoints
+		user := v1.Group("/user")
+		user.Use(app.AuthMiddleware.MiddlewareFunc())
+		{
+			user.POST("", app.UserController.Create)
+			user.GET(":id", app.UserController.GetByID)
+			user.GET("", app.UserController.GetAll)
+			user.PUT(":id", app.UserController.Update)
+			user.DELETE(":id", app.UserController.Delete)
 		}
 
 	}
 
-	return router
+	router.NoRoute()
 }

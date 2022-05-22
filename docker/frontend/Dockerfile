@@ -1,6 +1,5 @@
 ARG node_version=18-buster
 
-
 # Development environment
 FROM node:${node_version} AS development
 

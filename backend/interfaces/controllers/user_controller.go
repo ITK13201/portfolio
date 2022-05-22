@@ -8,17 +8,25 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UserController struct {
+type UserController interface {
+	Create(c *gin.Context)
+	GetByID(c *gin.Context)
+	GetAll(c *gin.Context)
+	Update(c *gin.Context)
+	Delete(c *gin.Context)
+}
+
+type userController struct {
 	sqlClient *ent.Client
 }
 
-func NewUserController(sqlClient *ent.Client) *UserController {
-	return &UserController{
+func NewUserController(sqlClient *ent.Client) UserController {
+	return &userController{
 		sqlClient: sqlClient,
 	}
 }
 
-func (controller *UserController) Create(c *gin.Context) {
+func (controller *userController) Create(c *gin.Context) {
 	ctx := context.Background()
 
 	u := ent.User{}
@@ -40,7 +48,7 @@ func (controller *UserController) Create(c *gin.Context) {
 	c.JSON(201, *user)
 }
 
-func (controller *UserController) GetByID(c *gin.Context) {
+func (controller *userController) GetByID(c *gin.Context) {
 	ctx := context.Background()
 	id64, _ := strconv.ParseInt(c.Param("id"), 10, 64)
 	u, err := controller.sqlClient.User.Get(ctx, id64)
@@ -51,7 +59,7 @@ func (controller *UserController) GetByID(c *gin.Context) {
 	c.JSON(200, u)
 }
 
-func (controller *UserController) GetAll(c *gin.Context) {
+func (controller *userController) GetAll(c *gin.Context) {
 	ctx := context.Background()
 
 	users, err := controller.sqlClient.User.Query().All(ctx)
@@ -64,7 +72,7 @@ func (controller *UserController) GetAll(c *gin.Context) {
 	c.JSON(200, users)
 }
 
-func (controller *UserController) Update(c *gin.Context) {
+func (controller *userController) Update(c *gin.Context) {
 	ctx := context.Background()
 
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -101,7 +109,7 @@ func (controller *UserController) Update(c *gin.Context) {
 	}
 }
 
-func (controller *UserController) Delete(c *gin.Context) {
+func (controller *userController) Delete(c *gin.Context) {
 	ctx := context.Background()
 	id, _ := strconv.Atoi(c.Param("id"))
 	id64 := int64(id)

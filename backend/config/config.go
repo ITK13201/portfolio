@@ -12,7 +12,8 @@ type Config struct {
 	Debug       bool   `json:"debug" default:"false" envconfig:"DEBUG"`
 	DatabaseUrl string `json:"database-url" required:"true" envconfig:"DATABASE_URL"`
 	Dsn         string `json:"dsn" ignored:"true"`
-	Port        int    `json:"port" required:"true" envconfig:"PORT"`
+	Port        string `json:"port" required:"true" envconfig:"PORT"`
+	SecretKey   string `json:"secret-key" required:"true" envconfig:"SECRET_KEY"`
 }
 
 var Cfg *Config
