@@ -5,7 +5,7 @@ import (
 	"github.com/ITK13201/portfolio/backend/domain"
 	"github.com/ITK13201/portfolio/backend/ent"
 	"github.com/ITK13201/portfolio/backend/ent/user"
-	crypto "github.com/ITK13201/portfolio/backend/internal/crypt"
+	"github.com/ITK13201/portfolio/backend/internal/crypto"
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"net/http"
