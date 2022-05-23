@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -33,9 +34,9 @@ func (uu *UserUpdate) SetUsername(s string) *UserUpdate {
 	return uu
 }
 
-// SetPassword sets the "password" field.
-func (uu *UserUpdate) SetPassword(s string) *UserUpdate {
-	uu.mutation.SetPassword(s)
+// SetHashedPassword sets the "hashed_password" field.
+func (uu *UserUpdate) SetHashedPassword(s string) *UserUpdate {
+	uu.mutation.SetHashedPassword(s)
 	return uu
 }
 
@@ -137,12 +138,12 @@ func (uu *UserUpdate) defaults() {
 func (uu *UserUpdate) check() error {
 	if v, ok := uu.mutation.Username(); ok {
 		if err := user.UsernameValidator(v); err != nil {
-			return &ValidationError{Name: "username", err: fmt.Errorf("ent: validator failed for field \"username\": %w", err)}
+			return &ValidationError{Name: "username", err: fmt.Errorf(`ent: validator failed for field "User.username": %w`, err)}
 		}
 	}
-	if v, ok := uu.mutation.Password(); ok {
-		if err := user.PasswordValidator(v); err != nil {
-			return &ValidationError{Name: "password", err: fmt.Errorf("ent: validator failed for field \"password\": %w", err)}
+	if v, ok := uu.mutation.HashedPassword(); ok {
+		if err := user.HashedPasswordValidator(v); err != nil {
+			return &ValidationError{Name: "hashed_password", err: fmt.Errorf(`ent: validator failed for field "User.hashed_password": %w`, err)}
 		}
 	}
 	return nil
@@ -173,11 +174,11 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: user.FieldUsername,
 		})
 	}
-	if value, ok := uu.mutation.Password(); ok {
+	if value, ok := uu.mutation.HashedPassword(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: user.FieldPassword,
+			Column: user.FieldHashedPassword,
 		})
 	}
 	if value, ok := uu.mutation.CreatedAt(); ok {
@@ -219,9 +220,9 @@ func (uuo *UserUpdateOne) SetUsername(s string) *UserUpdateOne {
 	return uuo
 }
 
-// SetPassword sets the "password" field.
-func (uuo *UserUpdateOne) SetPassword(s string) *UserUpdateOne {
-	uuo.mutation.SetPassword(s)
+// SetHashedPassword sets the "hashed_password" field.
+func (uuo *UserUpdateOne) SetHashedPassword(s string) *UserUpdateOne {
+	uuo.mutation.SetHashedPassword(s)
 	return uuo
 }
 
@@ -330,12 +331,12 @@ func (uuo *UserUpdateOne) defaults() {
 func (uuo *UserUpdateOne) check() error {
 	if v, ok := uuo.mutation.Username(); ok {
 		if err := user.UsernameValidator(v); err != nil {
-			return &ValidationError{Name: "username", err: fmt.Errorf("ent: validator failed for field \"username\": %w", err)}
+			return &ValidationError{Name: "username", err: fmt.Errorf(`ent: validator failed for field "User.username": %w`, err)}
 		}
 	}
-	if v, ok := uuo.mutation.Password(); ok {
-		if err := user.PasswordValidator(v); err != nil {
-			return &ValidationError{Name: "password", err: fmt.Errorf("ent: validator failed for field \"password\": %w", err)}
+	if v, ok := uuo.mutation.HashedPassword(); ok {
+		if err := user.HashedPasswordValidator(v); err != nil {
+			return &ValidationError{Name: "hashed_password", err: fmt.Errorf(`ent: validator failed for field "User.hashed_password": %w`, err)}
 		}
 	}
 	return nil
@@ -354,7 +355,7 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	id, ok := uuo.mutation.ID()
 	if !ok {
-		return nil, &ValidationError{Name: "ID", err: fmt.Errorf("missing User.ID for update")}
+		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "User.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
 	if fields := uuo.fields; len(fields) > 0 {
@@ -383,11 +384,11 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Column: user.FieldUsername,
 		})
 	}
-	if value, ok := uuo.mutation.Password(); ok {
+	if value, ok := uuo.mutation.HashedPassword(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: user.FieldPassword,
+			Column: user.FieldHashedPassword,
 		})
 	}
 	if value, ok := uuo.mutation.CreatedAt(); ok {

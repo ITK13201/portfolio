@@ -10,17 +10,20 @@ import (
 )
 
 type Application struct {
-	AuthMiddleware middlewares.AuthMiddleware
-	UserController controllers.UserController
+	AuthMiddleware     middlewares.AuthMiddleware
+	UserController     controllers.UserController
+	RegisterController controllers.RegisterController
 }
 
 func BuildApplication(sqliClient *ent.Client) *Application {
 	authMiddleware := middlewares.NewAuthMiddleware(sqliClient)
 	userController := controllers.NewUserController(sqliClient)
+	registerController := controllers.NewRegisterController(sqliClient)
 
 	return &Application{
-		AuthMiddleware: authMiddleware,
-		UserController: userController,
+		AuthMiddleware:     authMiddleware,
+		UserController:     userController,
+		RegisterController: registerController,
 	}
 }
 

@@ -17,7 +17,7 @@ func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Unique().Immutable(),
 		field.String("username").NotEmpty().Unique().StructTag("binding:\"required\""),
-		field.String("password").NotEmpty().StructTag("binding:\"required\""),
+		field.String("hashed_password").NotEmpty().StructTag("binding:\"required\""),
 		field.Time("created_at").Default(time.Now),
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
 	}

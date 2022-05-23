@@ -40,8 +40,13 @@ func (a *authMiddlewareHandler) authenticator(c *gin.Context) (interface{}, erro
 		return "", jwt.ErrFailedAuthentication
 	}
 
+	// any db error occurred
+	if err != nil {
+		return "", err
+	}
+
 	// Has valid password?
-	if crypto.IsHashedPasswordEqualWithPlainPassword(a.retrievedUser.Password, loginVals.Password) {
+	if crypto.IsHashedPasswordEqualWithPlainPassword(a.retrievedUser.HashedPassword, loginVals.Password) {
 		a.authUser = &authUser{
 			ID:       a.retrievedUser.ID,
 			Username: a.retrievedUser.Username,

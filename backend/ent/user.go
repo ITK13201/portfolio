@@ -18,8 +18,8 @@ type User struct {
 	ID int64 `json:"id,omitempty"`
 	// Username holds the value of the "username" field.
 	Username string `json:"username,omitempty" binding:"required"`
-	// Password holds the value of the "password" field.
-	Password string `json:"password,omitempty" binding:"required"`
+	// HashedPassword holds the value of the "hashed_password" field.
+	HashedPassword string `json:"hashed_password,omitempty" binding:"required"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -33,7 +33,7 @@ func (*User) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case user.FieldID:
 			values[i] = new(sql.NullInt64)
-		case user.FieldUsername, user.FieldPassword:
+		case user.FieldUsername, user.FieldHashedPassword:
 			values[i] = new(sql.NullString)
 		case user.FieldCreatedAt, user.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -64,11 +64,11 @@ func (u *User) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				u.Username = value.String
 			}
-		case user.FieldPassword:
+		case user.FieldHashedPassword:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field password", values[i])
+				return fmt.Errorf("unexpected type %T for field hashed_password", values[i])
 			} else if value.Valid {
-				u.Password = value.String
+				u.HashedPassword = value.String
 			}
 		case user.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -112,8 +112,8 @@ func (u *User) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", u.ID))
 	builder.WriteString(", username=")
 	builder.WriteString(u.Username)
-	builder.WriteString(", password=")
-	builder.WriteString(u.Password)
+	builder.WriteString(", hashed_password=")
+	builder.WriteString(u.HashedPassword)
 	builder.WriteString(", created_at=")
 	builder.WriteString(u.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", updated_at=")

@@ -12,13 +12,15 @@ func InitRouter(app *Application, router *gin.Engine) {
 		v1.GET("/ping", func(c *gin.Context) {
 			c.String(http.StatusOK, "pong")
 		})
+		// register endpoint
+		v1.POST("/register", app.RegisterController.Register)
 		// authentication endpoints
 		auth := v1.Group("/auth")
 		{
 			auth.POST("/login", app.AuthMiddleware.LoginHandler)
 			auth.POST("/refresh_token", app.AuthMiddleware.RefreshHandler)
 		}
-		// users endpoints
+		// user endpoints
 		user := v1.Group("/user")
 		user.Use(app.AuthMiddleware.MiddlewareFunc())
 		{

@@ -19,10 +19,10 @@ func init() {
 	userDescUsername := userFields[1].Descriptor()
 	// user.UsernameValidator is a validator for the "username" field. It is called by the builders before save.
 	user.UsernameValidator = userDescUsername.Validators[0].(func(string) error)
-	// userDescPassword is the schema descriptor for password field.
-	userDescPassword := userFields[2].Descriptor()
-	// user.PasswordValidator is a validator for the "password" field. It is called by the builders before save.
-	user.PasswordValidator = userDescPassword.Validators[0].(func(string) error)
+	// userDescHashedPassword is the schema descriptor for hashed_password field.
+	userDescHashedPassword := userFields[2].Descriptor()
+	// user.HashedPasswordValidator is a validator for the "hashed_password" field. It is called by the builders before save.
+	user.HashedPasswordValidator = userDescHashedPassword.Validators[0].(func(string) error)
 	// userDescCreatedAt is the schema descriptor for created_at field.
 	userDescCreatedAt := userFields[3].Descriptor()
 	// user.DefaultCreatedAt holds the default value on creation for the created_at field.

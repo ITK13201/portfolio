@@ -57,3 +57,21 @@ After the change, you can update the model as follows.
 ```shell
 docker-compose exec app go generate ./ent
 ```
+
+## Schema
+
+### Add schema
+
+if you would like to make "Hoge" schema, run following
+
+```shell
+docker compose exec backend go run entgo.io/ent/cmd/ent init Hoge
+```
+
+### Generate
+
+generate ent code from [./ent/schema/](./ent/schema/)
+
+```shell
+docker compose exec backend go generate ./ent
+```

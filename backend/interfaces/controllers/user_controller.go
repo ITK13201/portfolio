@@ -38,7 +38,7 @@ func (controller *userController) Create(c *gin.Context) {
 		return
 	}
 
-	user, err := controller.sqlClient.User.Create().SetUsername(u.Username).SetPassword(u.Password).Save(ctx)
+	user, err := controller.sqlClient.User.Create().SetUsername(u.Username).SetHashedPassword(u.HashedPassword).Save(ctx)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"error": err.Error(),
