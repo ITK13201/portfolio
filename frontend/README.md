@@ -1,43 +1,15 @@
-# Portfolio
-
-This is an application for my portfolio site.
-You can access it at the following link.
-
-https://www.i-tk.dev
-
-## Components
-
-- Framework: [Next.js](https://nextjs.org/)
-- Design: [Material UI](https://mui.com/)
-
-## Install
-
-```shell
-yarn install
-```
+# Frontend
 
 ## Usage
 
-### Start (Development)
+### Rebuild
 
 ```shell
-yarn dev
-```
-
-### Start (Production)
-
-```shell
-yarn start
-```
-
-### Build
-
-```shell
-yarn build
+docker compose build frontend
 ```
 
 ### Tracking and Format
 
 ```shell
-yarn watch
+docker compose exec frontend yarn watch
 ```

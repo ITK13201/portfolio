@@ -1,77 +1,51 @@
-# Gin Ent Sample
-
-This is a sample application of golang's web framework gin and orm ent.
-
-## Components
-
-- Web Framework: [Gin](https://github.com/gin-gonic/gin)
-- ORM: [ent](https://github.com/ent/ent)
-- SQL Migration tool: [goose](https://github.com/pressly/goose)
-
-## Install
-
-### Prepare
-
-- docker
-- docker-compose
-
-### Clone
-
-```shell
-git clone https://github.com/ITK13201/gin-ent-sample.git
-cd gin-ent-sample
-```
-
-### Init environment variables and create log files
-
-```shell
-./scripts/init.sh
-```
-
-### Build
-
-```shell
-docker-compose build
-```
-
+# Backend
 
 ## Usage
 
-### Start Container
+### Migration
+
+migration directory: [./migrations](./migrations)
+
+See the [goose documentation](https://pressly.github.io/goose/) for details.
+
+#### migrate sql files
 
 ```shell
-docker-compose up
+docker-compose exec backend goose.sh up
 ```
 
-### Stop container
+#### rollback sql files
 
 ```shell
-docker-compose down
+docker-compose exec backend goose.sh down
 ```
 
-### Modify Models
+### Schema
 
-Only the directory under [./ent/schema](./ent/schema) needs to be changed.
-After the change, you can update the model as follows.
+#### Add schema
 
-```shell
-docker-compose exec app go generate ./ent
-```
-
-## Schema
-
-### Add schema
-
-if you would like to make "Hoge" schema, run following
+If you would like to create the "Hoge" schema, you can do so with the following command.
 
 ```shell
 docker compose exec backend go run entgo.io/ent/cmd/ent init Hoge
 ```
 
-### Generate
+#### Modify Models
 
-generate ent code from [./ent/schema/](./ent/schema/)
+Only the directory under [./ent/schema](./ent/schema) needs to be changed.
+After the change, you can update the model as follows.
 
 ```shell
 docker compose exec backend go generate ./ent
+```
+
+### Package
+
+#### Install packages and modify mod files
+
+You can install the package with the following command.
+
+```shell
+docker compose exec backend go get -u <package name>
+docker compose build backend
 ```
