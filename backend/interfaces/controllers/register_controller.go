@@ -28,12 +28,16 @@ func (r *registerController) Register(c *gin.Context) {
 	var registerVals domain.Register
 	err := c.Bind(&registerVals)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
 		return
 	}
 	u, err := r.registerInteractor.CreateUser(registerVals)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
 		return
 	}
 	c.JSON(http.StatusCreated, u)

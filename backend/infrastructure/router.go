@@ -25,10 +25,17 @@ func InitRouter(app *Application, router *gin.Engine) {
 		user.Use(app.AuthMiddleware.MiddlewareFunc())
 		{
 			user.POST("", app.UserController.Create)
-			user.GET(":id", app.UserController.GetByID)
+			user.GET("/:id", app.UserController.GetByID)
 			user.GET("", app.UserController.GetAll)
-			user.PUT(":id", app.UserController.Update)
-			user.DELETE(":id", app.UserController.Delete)
+			user.PUT("/:id", app.UserController.Update)
+			user.DELETE("/:id", app.UserController.Delete)
+		}
+		// about topic endpoints
+		aboutTopic := v1.Group("/about_topic")
+		aboutTopic.Use(app.AuthMiddleware.MiddlewareFunc())
+		{
+			aboutTopic.GET("/:id", app.AboutTopicController.GetByID)
+			aboutTopic.GET("", app.AboutTopicController.GetAll)
 		}
 
 	}
