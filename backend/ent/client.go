@@ -9,10 +9,14 @@ import (
 
 	"github.com/ITK13201/portfolio/backend/ent/migrate"
 
+	"github.com/ITK13201/portfolio/backend/ent/abouttopic"
+	"github.com/ITK13201/portfolio/backend/ent/image"
 	"github.com/ITK13201/portfolio/backend/ent/user"
+	"github.com/ITK13201/portfolio/backend/ent/work"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // Client is the client that holds all ent builders.
@@ -20,8 +24,14 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// AboutTopic is the client for interacting with the AboutTopic builders.
+	AboutTopic *AboutTopicClient
+	// Image is the client for interacting with the Image builders.
+	Image *ImageClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// Work is the client for interacting with the Work builders.
+	Work *WorkClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -35,7 +45,10 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.AboutTopic = NewAboutTopicClient(c.config)
+	c.Image = NewImageClient(c.config)
 	c.User = NewUserClient(c.config)
+	c.Work = NewWorkClient(c.config)
 }
 
 // Open opens a database/sql.DB specified by the driver name and
@@ -67,9 +80,12 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		User:   NewUserClient(cfg),
+		ctx:        ctx,
+		config:     cfg,
+		AboutTopic: NewAboutTopicClient(cfg),
+		Image:      NewImageClient(cfg),
+		User:       NewUserClient(cfg),
+		Work:       NewWorkClient(cfg),
 	}, nil
 }
 
@@ -87,16 +103,19 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		User:   NewUserClient(cfg),
+		ctx:        ctx,
+		config:     cfg,
+		AboutTopic: NewAboutTopicClient(cfg),
+		Image:      NewImageClient(cfg),
+		User:       NewUserClient(cfg),
+		Work:       NewWorkClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		User.
+//		AboutTopic.
 //		Query().
 //		Count(ctx)
 //
@@ -119,7 +138,206 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
+	c.AboutTopic.Use(hooks...)
+	c.Image.Use(hooks...)
 	c.User.Use(hooks...)
+	c.Work.Use(hooks...)
+}
+
+// AboutTopicClient is a client for the AboutTopic schema.
+type AboutTopicClient struct {
+	config
+}
+
+// NewAboutTopicClient returns a client for the AboutTopic from the given config.
+func NewAboutTopicClient(c config) *AboutTopicClient {
+	return &AboutTopicClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `abouttopic.Hooks(f(g(h())))`.
+func (c *AboutTopicClient) Use(hooks ...Hook) {
+	c.hooks.AboutTopic = append(c.hooks.AboutTopic, hooks...)
+}
+
+// Create returns a create builder for AboutTopic.
+func (c *AboutTopicClient) Create() *AboutTopicCreate {
+	mutation := newAboutTopicMutation(c.config, OpCreate)
+	return &AboutTopicCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AboutTopic entities.
+func (c *AboutTopicClient) CreateBulk(builders ...*AboutTopicCreate) *AboutTopicCreateBulk {
+	return &AboutTopicCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AboutTopic.
+func (c *AboutTopicClient) Update() *AboutTopicUpdate {
+	mutation := newAboutTopicMutation(c.config, OpUpdate)
+	return &AboutTopicUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AboutTopicClient) UpdateOne(at *AboutTopic) *AboutTopicUpdateOne {
+	mutation := newAboutTopicMutation(c.config, OpUpdateOne, withAboutTopic(at))
+	return &AboutTopicUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AboutTopicClient) UpdateOneID(id int64) *AboutTopicUpdateOne {
+	mutation := newAboutTopicMutation(c.config, OpUpdateOne, withAboutTopicID(id))
+	return &AboutTopicUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AboutTopic.
+func (c *AboutTopicClient) Delete() *AboutTopicDelete {
+	mutation := newAboutTopicMutation(c.config, OpDelete)
+	return &AboutTopicDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *AboutTopicClient) DeleteOne(at *AboutTopic) *AboutTopicDeleteOne {
+	return c.DeleteOneID(at.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *AboutTopicClient) DeleteOneID(id int64) *AboutTopicDeleteOne {
+	builder := c.Delete().Where(abouttopic.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AboutTopicDeleteOne{builder}
+}
+
+// Query returns a query builder for AboutTopic.
+func (c *AboutTopicClient) Query() *AboutTopicQuery {
+	return &AboutTopicQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a AboutTopic entity by its id.
+func (c *AboutTopicClient) Get(ctx context.Context, id int64) (*AboutTopic, error) {
+	return c.Query().Where(abouttopic.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AboutTopicClient) GetX(ctx context.Context, id int64) *AboutTopic {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryImage queries the image edge of a AboutTopic.
+func (c *AboutTopicClient) QueryImage(at *AboutTopic) *ImageQuery {
+	query := &ImageQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := at.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(abouttopic.Table, abouttopic.FieldID, id),
+			sqlgraph.To(image.Table, image.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, abouttopic.ImageTable, abouttopic.ImageColumn),
+		)
+		fromV = sqlgraph.Neighbors(at.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *AboutTopicClient) Hooks() []Hook {
+	return c.hooks.AboutTopic
+}
+
+// ImageClient is a client for the Image schema.
+type ImageClient struct {
+	config
+}
+
+// NewImageClient returns a client for the Image from the given config.
+func NewImageClient(c config) *ImageClient {
+	return &ImageClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `image.Hooks(f(g(h())))`.
+func (c *ImageClient) Use(hooks ...Hook) {
+	c.hooks.Image = append(c.hooks.Image, hooks...)
+}
+
+// Create returns a create builder for Image.
+func (c *ImageClient) Create() *ImageCreate {
+	mutation := newImageMutation(c.config, OpCreate)
+	return &ImageCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Image entities.
+func (c *ImageClient) CreateBulk(builders ...*ImageCreate) *ImageCreateBulk {
+	return &ImageCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Image.
+func (c *ImageClient) Update() *ImageUpdate {
+	mutation := newImageMutation(c.config, OpUpdate)
+	return &ImageUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ImageClient) UpdateOne(i *Image) *ImageUpdateOne {
+	mutation := newImageMutation(c.config, OpUpdateOne, withImage(i))
+	return &ImageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ImageClient) UpdateOneID(id int64) *ImageUpdateOne {
+	mutation := newImageMutation(c.config, OpUpdateOne, withImageID(id))
+	return &ImageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Image.
+func (c *ImageClient) Delete() *ImageDelete {
+	mutation := newImageMutation(c.config, OpDelete)
+	return &ImageDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *ImageClient) DeleteOne(i *Image) *ImageDeleteOne {
+	return c.DeleteOneID(i.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *ImageClient) DeleteOneID(id int64) *ImageDeleteOne {
+	builder := c.Delete().Where(image.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ImageDeleteOne{builder}
+}
+
+// Query returns a query builder for Image.
+func (c *ImageClient) Query() *ImageQuery {
+	return &ImageQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a Image entity by its id.
+func (c *ImageClient) Get(ctx context.Context, id int64) (*Image, error) {
+	return c.Query().Where(image.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ImageClient) GetX(ctx context.Context, id int64) *Image {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ImageClient) Hooks() []Hook {
+	return c.hooks.Image
 }
 
 // UserClient is a client for the User schema.
@@ -210,4 +428,110 @@ func (c *UserClient) GetX(ctx context.Context, id int64) *User {
 // Hooks returns the client hooks.
 func (c *UserClient) Hooks() []Hook {
 	return c.hooks.User
+}
+
+// WorkClient is a client for the Work schema.
+type WorkClient struct {
+	config
+}
+
+// NewWorkClient returns a client for the Work from the given config.
+func NewWorkClient(c config) *WorkClient {
+	return &WorkClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `work.Hooks(f(g(h())))`.
+func (c *WorkClient) Use(hooks ...Hook) {
+	c.hooks.Work = append(c.hooks.Work, hooks...)
+}
+
+// Create returns a create builder for Work.
+func (c *WorkClient) Create() *WorkCreate {
+	mutation := newWorkMutation(c.config, OpCreate)
+	return &WorkCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Work entities.
+func (c *WorkClient) CreateBulk(builders ...*WorkCreate) *WorkCreateBulk {
+	return &WorkCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Work.
+func (c *WorkClient) Update() *WorkUpdate {
+	mutation := newWorkMutation(c.config, OpUpdate)
+	return &WorkUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WorkClient) UpdateOne(w *Work) *WorkUpdateOne {
+	mutation := newWorkMutation(c.config, OpUpdateOne, withWork(w))
+	return &WorkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WorkClient) UpdateOneID(id int64) *WorkUpdateOne {
+	mutation := newWorkMutation(c.config, OpUpdateOne, withWorkID(id))
+	return &WorkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Work.
+func (c *WorkClient) Delete() *WorkDelete {
+	mutation := newWorkMutation(c.config, OpDelete)
+	return &WorkDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *WorkClient) DeleteOne(w *Work) *WorkDeleteOne {
+	return c.DeleteOneID(w.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *WorkClient) DeleteOneID(id int64) *WorkDeleteOne {
+	builder := c.Delete().Where(work.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WorkDeleteOne{builder}
+}
+
+// Query returns a query builder for Work.
+func (c *WorkClient) Query() *WorkQuery {
+	return &WorkQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a Work entity by its id.
+func (c *WorkClient) Get(ctx context.Context, id int64) (*Work, error) {
+	return c.Query().Where(work.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WorkClient) GetX(ctx context.Context, id int64) *Work {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryImage queries the image edge of a Work.
+func (c *WorkClient) QueryImage(w *Work) *ImageQuery {
+	query := &ImageQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := w.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(work.Table, work.FieldID, id),
+			sqlgraph.To(image.Table, image.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, work.ImageTable, work.ImageColumn),
+		)
+		fromV = sqlgraph.Neighbors(w.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *WorkClient) Hooks() []Hook {
+	return c.hooks.Work
 }

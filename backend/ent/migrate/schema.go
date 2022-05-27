@@ -3,11 +3,51 @@
 package migrate
 
 import (
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql/schema"
 	"entgo.io/ent/schema/field"
 )
 
 var (
+	// AboutTopicsColumns holds the columns for the "about_topics" table.
+	AboutTopicsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "title", Type: field.TypeString, Unique: true},
+		{Name: "description_jp", Type: field.TypeString},
+		{Name: "description_en", Type: field.TypeString},
+		{Name: "priority", Type: field.TypeInt},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "image_id", Type: field.TypeInt64, Nullable: true},
+	}
+	// AboutTopicsTable holds the schema information for the "about_topics" table.
+	AboutTopicsTable = &schema.Table{
+		Name:       "about_topics",
+		Columns:    AboutTopicsColumns,
+		PrimaryKey: []*schema.Column{AboutTopicsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "about_topics_images_image",
+				Columns:    []*schema.Column{AboutTopicsColumns[7]},
+				RefColumns: []*schema.Column{ImagesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// ImagesColumns holds the columns for the "images" table.
+	ImagesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "slug", Type: field.TypeString, Unique: true},
+		{Name: "path", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+	}
+	// ImagesTable holds the schema information for the "images" table.
+	ImagesTable = &schema.Table{
+		Name:       "images",
+		Columns:    ImagesColumns,
+		PrimaryKey: []*schema.Column{ImagesColumns[0]},
+	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
@@ -22,11 +62,54 @@ var (
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 	}
+	// WorksColumns holds the columns for the "works" table.
+	WorksColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "title", Type: field.TypeString, Unique: true},
+		{Name: "description_jp", Type: field.TypeString},
+		{Name: "description_en", Type: field.TypeString},
+		{Name: "link", Type: field.TypeString},
+		{Name: "priority", Type: field.TypeInt},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "image_id", Type: field.TypeInt64, Nullable: true},
+	}
+	// WorksTable holds the schema information for the "works" table.
+	WorksTable = &schema.Table{
+		Name:       "works",
+		Columns:    WorksColumns,
+		PrimaryKey: []*schema.Column{WorksColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "works_images_image",
+				Columns:    []*schema.Column{WorksColumns[8]},
+				RefColumns: []*schema.Column{ImagesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		AboutTopicsTable,
+		ImagesTable,
 		UsersTable,
+		WorksTable,
 	}
 )
 
 func init() {
+	AboutTopicsTable.ForeignKeys[0].RefTable = ImagesTable
+	AboutTopicsTable.Annotation = &entsql.Annotation{
+		Table: "about_topics",
+	}
+	ImagesTable.Annotation = &entsql.Annotation{
+		Table: "images",
+	}
+	UsersTable.Annotation = &entsql.Annotation{
+		Table: "users",
+	}
+	WorksTable.ForeignKeys[0].RefTable = ImagesTable
+	WorksTable.Annotation = &entsql.Annotation{
+		Table: "works",
+	}
 }

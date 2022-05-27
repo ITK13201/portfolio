@@ -9,6 +9,32 @@ import (
 	"github.com/ITK13201/portfolio/backend/ent"
 )
 
+// The AboutTopicFunc type is an adapter to allow the use of ordinary
+// function as AboutTopic mutator.
+type AboutTopicFunc func(context.Context, *ent.AboutTopicMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AboutTopicFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.AboutTopicMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AboutTopicMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The ImageFunc type is an adapter to allow the use of ordinary
+// function as Image mutator.
+type ImageFunc func(context.Context, *ent.ImageMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ImageFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.ImageMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ImageMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The UserFunc type is an adapter to allow the use of ordinary
 // function as User mutator.
 type UserFunc func(context.Context, *ent.UserMutation) (ent.Value, error)
@@ -18,6 +44,19 @@ func (f UserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 	mv, ok := m.(*ent.UserMutation)
 	if !ok {
 		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The WorkFunc type is an adapter to allow the use of ordinary
+// function as Work mutator.
+type WorkFunc func(context.Context, *ent.WorkMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WorkFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.WorkMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.WorkMutation", m)
 	}
 	return f(ctx, mv)
 }
