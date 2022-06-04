@@ -65,4 +65,4 @@ FROM gcr.io/distroless/base:debug AS production
 COPY --from=tools /usr/local/bin/goose /bin/goose
 COPY --from=builder /backend/bin/portfolio /bin/portfolio
 
-CMD ["sh", "-c", "/bin/portfolio"]
+CMD ["sh", "-c", "/bin/portfolio runserver"]
