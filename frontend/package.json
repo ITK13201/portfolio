@@ -35,5 +35,9 @@
     "eslint": "8.15.0",
     "eslint-config-next": "12.1.6",
     "typescript": "4.6.4"
-  }
+  },
+  "main": "src/pages/index.tsx",
+  "repository": "git@github.com:ITK13201/portfolio.git",
+  "author": "Takumi Ikeda <tkik13201@gmail.com>",
+  "license": "MIT"
 }
