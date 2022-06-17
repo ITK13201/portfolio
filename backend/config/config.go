@@ -8,12 +8,16 @@ import (
 	"github.com/xo/dburl"
 )
 
+const Version string = "1.0.0"
+
 type Config struct {
+	// config from environment variables
 	Debug       bool   `json:"debug" default:"false" envconfig:"DEBUG"`
 	DatabaseUrl string `json:"database-url" required:"true" envconfig:"DATABASE_URL"`
-	Dsn         string `json:"dsn" ignored:"true"`
 	Port        string `json:"port" required:"true" envconfig:"PORT"`
 	SecretKey   string `json:"secret-key" required:"true" envconfig:"SECRET_KEY"`
+	// not environment variables
+	Dsn string `json:"dsn" ignored:"true"`
 }
 
 var Cfg *Config

@@ -6,44 +6,88 @@ import (
 	"io"
 )
 
-type Runserver struct {
-	FlagSet *flag.FlagSet
+type Usage struct {
+	name        string
+	description string
 }
 
-type Version struct {
+type Info struct {
+	name                    string
+	description             string
+	CommandUsages           []Usage
+	ManagementCommandUsages []Usage
+}
+
+func (info *Info) printInfo(flagSet *flag.FlagSet) {
+	var usages []Usage
+	printUsages := func(w io.Writer, usages []Usage) {
+		for i := 0; i < len(usages); i++ {
+			fmt.Fprintf(w, "  %s\t%s\n", usages[i].name, usages[i].description)
+		}
+	}
+
+	o := flagSet.Output()
+	fmt.Fprintf(o, "\nUsage: %s\n", info.name)
+	fmt.Fprintf(o, "\nDescription: %s\n", info.description)
+	usages = info.CommandUsages
+	if len(usages) > 0 {
+		fmt.Fprintf(o, "\nCommands:\n")
+		printUsages(o, info.CommandUsages)
+	}
+	usages = info.ManagementCommandUsages
+	if len(usages) > 0 {
+		fmt.Fprintf(o, "\nManagement Commands:\n")
+		printUsages(o, info.ManagementCommandUsages)
+	}
+
+	fmt.Fprintf(o, "\nOptions:\n")
+	flagSet.PrintDefaults()
+}
+
+type Job struct {
 	FlagSet *flag.FlagSet
+	Info    Info
+	Help    bool
 }
 
 type Options struct {
-	Runserver Runserver
-	Version   Version
-	Help      bool
+	Info Info
+	Help bool
+	Job  Job
 }
 
-var ops Options
-
-func (opts *Options) printUsage(w io.Writer) {
-	dump := func(w io.Writer, name string, description string) {
-		fmt.Fprintf(w, "  %s\t%s\n", name, description)
-	}
-	dump(w, "runserver", "Run api server")
-	dump(w, "version", "Show the app version information")
-}
+var Ops Options
 
 func init() {
-	flag.CommandLine.Init("portfolio", flag.ExitOnError)
-
-	ops.Runserver.FlagSet = flag.NewFlagSet("runserver", flag.ExitOnError)
-	ops.Version.FlagSet = flag.NewFlagSet("version", flag.ExitOnError)
-	flag.BoolVar(&ops.Help, "h", false, "Show how to use the app")
-
-	flag.CommandLine.Usage = func() {
-		o := flag.CommandLine.Output()
-		fmt.Fprintf(o, "\nUsage: %s\n", flag.CommandLine.Name())
-		fmt.Fprintf(o, "\nDescription: portfolio api server\n")
-		fmt.Fprintf(o, "\nCommands:\n")
-		ops.printUsage(o)
-		fmt.Fprintf(o, "\nOptions:\n")
-		flag.PrintDefaults()
+	// initial information
+	Ops.Info = Info{
+		name:        "portfolio",
+		description: "portfolio api server",
+		CommandUsages: []Usage{
+			{name: "runserver", description: "Run api server"},
+			{name: "version", description: "Show the app version information"},
+		},
+		ManagementCommandUsages: []Usage{
+			{name: "job*", description: "Manage job scripts"},
+		},
 	}
+	Ops.Job.Info = Info{
+		name:        "job",
+		description: "Run job scripts",
+	}
+
+	var flagSet *flag.FlagSet
+
+	// initial flagset
+	flagSet = flag.CommandLine
+	flagSet.Init(Ops.Info.name, flag.ExitOnError)
+	flagSet.Usage = func() { Ops.Info.printInfo(flagSet) }
+	flagSet.BoolVar(&Ops.Help, "h", false, "Show how to use the app")
+
+	// job sub commands
+	Ops.Job.FlagSet = flag.NewFlagSet(Ops.Job.Info.name, flag.ExitOnError)
+	flagSet = Ops.Job.FlagSet
+	flagSet.Init(Ops.Job.Info.name, flag.ExitOnError)
+	flagSet.Usage = func() { Ops.Job.Info.printInfo(flagSet) }
+	flagSet.BoolVar(&Ops.Job.Help, "h", false, "Show how to use the command")
 }
