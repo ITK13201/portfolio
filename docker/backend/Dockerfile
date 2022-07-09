@@ -45,8 +45,6 @@ RUN groupadd -g 1000 golang \
     && useradd -m -s /bin/bash -u 1000 -g 1000 golang
 USER golang
 
-ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh" ]
-
 EXPOSE 8000
 
 CMD ["air", "-c", ".air.toml"]
