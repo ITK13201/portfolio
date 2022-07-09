@@ -3,8 +3,9 @@ ARG go_version=1.18-buster
 # Tools
 FROM golang:${go_version} AS tools
 
-ARG goose_version=v3.5.3
-ARG air_version=1.29.0
+ARG goose_version=v3.6.1
+ARG air_version=1.40.3
+ARG cobra_cli_version=v1.3.0
 
 RUN wget https://github.com/pressly/goose/releases/download/${goose_version}/goose_linux_x86_64 \
     && mv goose_linux_x86_64 /usr/local/bin/goose \
@@ -14,6 +15,9 @@ RUN wget https://github.com/cosmtrek/air/releases/download/v${air_version}/air_$
     && tar -C /usr/local/bin -xzvf air_${air_version}_linux_amd64.tar.gz \
     && chmod +x /usr/local/bin/air \
     && rm air_${air_version}_linux_amd64.tar.gz
+
+RUN go install github.com/spf13/cobra-cli@${cobra_cli_version} \
+    && mv /go/bin/cobra-cli /usr/local/bin/cobra-cli
 
 # Dvenelopment environment
 FROM golang:${go_version} AS development
@@ -35,6 +39,13 @@ COPY ./backend/bin /usr/local/bin
 
 COPY --from=tools /usr/local/bin/goose /bin/goose
 COPY --from=tools /usr/local/bin/air /bin/air
+COPY --from=tools /usr/local/bin/cobra-cli /bin/cobra-cli
+
+RUN groupadd -g 1000 golang \
+    && useradd -m -s /bin/bash -u 1000 -g 1000 golang
+USER golang
+
+ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh" ]
 
 EXPOSE 8000
 
