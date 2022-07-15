@@ -1,7 +1,7 @@
 package job
 
 import (
-	"github.com/ITK13201/portfolio/backend/jobs"
+	"github.com/ITK13201/portfolio/backend/jobs/loaddata"
 
 	"github.com/ITK13201/portfolio/backend/cmd"
 	"github.com/spf13/cobra"
@@ -14,11 +14,13 @@ var loaddataCmd = &cobra.Command{
 	Long: `Load initial data
 Caution: All table contents in the specified domain/model will be deleted before execution.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		jobs.Run(cmd, args)
+		loaddata.Run(cmd, args)
 	},
 }
 
 func init() {
+	var flags loaddata.LoaddataFlags
+
 	cmd.JobCmd.AddCommand(loaddataCmd)
 
 	// Here you will define your flags and configuration settings.
@@ -30,4 +32,9 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// loaddataCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	loaddataCmd.Flags().StringVarP(&flags.File, "file", "f", "", "File path of the data to be loaded")
+	loaddataCmd.Flags().StringVarP(&flags.Type, "type", "t", "", "Format type of the specified data file using -f, --file")
+	loaddataCmd.Flags().StringVarP(&flags.Model, "model", "m", "", "Model defined in ent")
+
+	loaddata.Flags = &flags
 }

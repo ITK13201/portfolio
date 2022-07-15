@@ -4,9 +4,9 @@ CREATE TABLE works
 (
     id             INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY,
     title          VARCHAR(64)            NOT NULL UNIQUE,
-    description_jp VARCHAR(256)           NOT NULL,
-    description_en VARCHAR(256)           NOT NULL DEFAULT '',
-    link           VARCHAR(512)           NOT NULL,
+    description_jp VARCHAR(1024)           NOT NULL,
+    description_en VARCHAR(1024)           NOT NULL DEFAULT '',
+    link           VARCHAR(1024)           NOT NULL,
     image_id       INTEGER                NOT NULL,
     priority       INTEGER                NOT NULL,
     created_at     DATETIME               NOT NULL DEFAULT CURRENT_TIMESTAMP,
