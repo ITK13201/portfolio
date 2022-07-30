@@ -11,8 +11,6 @@ import Contact from 'components/home/Contact';
 import ScrollUp from 'components/design/ScrollUp';
 
 const Home: NextPage = () => {
-  const faviconPath = '/images/favicon';
-
   return (
     <div className={styles.container}>
       <Header />

@@ -23,7 +23,6 @@ interface MyAppProps extends AppProps {
 
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  const faviconPath = '/assets/images/favicon';
 
   usePageView();
 
@@ -44,24 +43,24 @@ export default function MyApp(props: MyAppProps) {
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href={faviconPath + '/apple-touch-icon.png'}
+          href="/apple-touch-icon.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href={faviconPath + '/favicon-32x32.png'}
+          href="/favicon-32x32.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href={faviconPath + '/favicon-16x16.png'}
+          href="/favicon-16x16.png"
         />
-        <link rel="manifest" href={faviconPath + '/site.webmanifest'} />
+        <link rel="manifest" href="/site.webmanifest" />
         <link
           rel="mask-icon"
-          href={faviconPath + '/safari-pinned-tab.svg'}
+          href="/safari-pinned-tab.svg"
           color="#5bbad5"
         />
         <meta name="msapplication-TileColor" content="#da532c" />
