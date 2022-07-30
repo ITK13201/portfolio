@@ -23,7 +23,7 @@ interface MyAppProps extends AppProps {
 
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  const faviconPath = '/images/favicon';
+  const faviconPath = '/assets/images/favicon';
 
   usePageView();
 
