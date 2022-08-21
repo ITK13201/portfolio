@@ -254,12 +254,12 @@ func (iq *ImageQuery) Clone() *ImageQuery {
 // Example:
 //
 //	var v []struct {
-//		Slug string `json:"slug,omitempty" binding:"required"`
+//		Path string `json:"path,omitempty" binding:"required"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Image.Query().
-//		GroupBy(image.FieldSlug).
+//		GroupBy(image.FieldPath).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -281,11 +281,11 @@ func (iq *ImageQuery) GroupBy(field string, fields ...string) *ImageGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Slug string `json:"slug,omitempty" binding:"required"`
+//		Path string `json:"path,omitempty" binding:"required"`
 //	}
 //
 //	client.Image.Query().
-//		Select(image.FieldSlug).
+//		Select(image.FieldPath).
 //		Scan(ctx, &v)
 //
 func (iq *ImageQuery) Select(fields ...string) *ImageSelect {

@@ -39,16 +39,16 @@ func (wc *WorkCreate) SetDescriptionEn(s string) *WorkCreate {
 	return wc
 }
 
-// SetImageID sets the "image_id" field.
-func (wc *WorkCreate) SetImageID(i int64) *WorkCreate {
-	wc.mutation.SetImageID(i)
+// SetLanguageID sets the "language_id" field.
+func (wc *WorkCreate) SetLanguageID(i int64) *WorkCreate {
+	wc.mutation.SetLanguageID(i)
 	return wc
 }
 
-// SetNillableImageID sets the "image_id" field if the given value is not nil.
-func (wc *WorkCreate) SetNillableImageID(i *int64) *WorkCreate {
+// SetNillableLanguageID sets the "language_id" field if the given value is not nil.
+func (wc *WorkCreate) SetNillableLanguageID(i *int64) *WorkCreate {
 	if i != nil {
-		wc.SetImageID(*i)
+		wc.SetLanguageID(*i)
 	}
 	return wc
 }
@@ -99,9 +99,9 @@ func (wc *WorkCreate) SetID(i int64) *WorkCreate {
 	return wc
 }
 
-// SetImage sets the "image" edge to the Image entity.
-func (wc *WorkCreate) SetImage(i *Image) *WorkCreate {
-	return wc.SetImageID(i.ID)
+// SetLanguage sets the "language" edge to the Image entity.
+func (wc *WorkCreate) SetLanguage(i *Image) *WorkCreate {
+	return wc.SetLanguageID(i.ID)
 }
 
 // Mutation returns the WorkMutation object of the builder.
@@ -317,12 +317,12 @@ func (wc *WorkCreate) createSpec() (*Work, *sqlgraph.CreateSpec) {
 		})
 		_node.UpdatedAt = value
 	}
-	if nodes := wc.mutation.ImageIDs(); len(nodes) > 0 {
+	if nodes := wc.mutation.LanguageIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   work.ImageTable,
-			Columns: []string{work.ImageColumn},
+			Table:   work.LanguageTable,
+			Columns: []string{work.LanguageColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -334,7 +334,7 @@ func (wc *WorkCreate) createSpec() (*Work, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.ImageID = nodes[0]
+		_node.LanguageID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -12,6 +12,9 @@ type AboutTopic func(*sql.Selector)
 // Image is the predicate function for image builders.
 type Image func(*sql.Selector)
 
+// Language is the predicate function for language builders.
+type Language func(*sql.Selector)
+
 // User is the predicate function for user builders.
 type User func(*sql.Selector)
 

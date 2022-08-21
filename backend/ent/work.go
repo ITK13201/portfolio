@@ -23,8 +23,8 @@ type Work struct {
 	DescriptionJp string `json:"description_jp,omitempty" binding:"required"`
 	// DescriptionEn holds the value of the "description_en" field.
 	DescriptionEn string `json:"description_en,omitempty" binding:"required"`
-	// ImageID holds the value of the "image_id" field.
-	ImageID int64 `json:"image_id,omitempty"`
+	// LanguageID holds the value of the "language_id" field.
+	LanguageID int64 `json:"language_id,omitempty"`
 	// Link holds the value of the "link" field.
 	Link string `json:"link,omitempty" binding:"required"`
 	// Priority holds the value of the "priority" field.
@@ -40,25 +40,25 @@ type Work struct {
 
 // WorkEdges holds the relations/edges for other nodes in the graph.
 type WorkEdges struct {
-	// Image holds the value of the image edge.
-	Image *Image `json:"image,omitempty"`
+	// Language holds the value of the language edge.
+	Language *Image `json:"language,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// ImageOrErr returns the Image value or an error if the edge
+// LanguageOrErr returns the Language value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e WorkEdges) ImageOrErr() (*Image, error) {
+func (e WorkEdges) LanguageOrErr() (*Image, error) {
 	if e.loadedTypes[0] {
-		if e.Image == nil {
-			// The edge image was loaded in eager-loading,
+		if e.Language == nil {
+			// The edge language was loaded in eager-loading,
 			// but was not found.
 			return nil, &NotFoundError{label: image.Label}
 		}
-		return e.Image, nil
+		return e.Language, nil
 	}
-	return nil, &NotLoadedError{edge: "image"}
+	return nil, &NotLoadedError{edge: "language"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -66,7 +66,7 @@ func (*Work) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case work.FieldID, work.FieldImageID, work.FieldPriority:
+		case work.FieldID, work.FieldLanguageID, work.FieldPriority:
 			values[i] = new(sql.NullInt64)
 		case work.FieldTitle, work.FieldDescriptionJp, work.FieldDescriptionEn, work.FieldLink:
 			values[i] = new(sql.NullString)
@@ -111,11 +111,11 @@ func (w *Work) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				w.DescriptionEn = value.String
 			}
-		case work.FieldImageID:
+		case work.FieldLanguageID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field image_id", values[i])
+				return fmt.Errorf("unexpected type %T for field language_id", values[i])
 			} else if value.Valid {
-				w.ImageID = value.Int64
+				w.LanguageID = value.Int64
 			}
 		case work.FieldLink:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -146,9 +146,9 @@ func (w *Work) assignValues(columns []string, values []interface{}) error {
 	return nil
 }
 
-// QueryImage queries the "image" edge of the Work entity.
-func (w *Work) QueryImage() *ImageQuery {
-	return (&WorkClient{config: w.config}).QueryImage(w)
+// QueryLanguage queries the "language" edge of the Work entity.
+func (w *Work) QueryLanguage() *ImageQuery {
+	return (&WorkClient{config: w.config}).QueryLanguage(w)
 }
 
 // Update returns a builder for updating this Work.
@@ -180,8 +180,8 @@ func (w *Work) String() string {
 	builder.WriteString(w.DescriptionJp)
 	builder.WriteString(", description_en=")
 	builder.WriteString(w.DescriptionEn)
-	builder.WriteString(", image_id=")
-	builder.WriteString(fmt.Sprintf("%v", w.ImageID))
+	builder.WriteString(", language_id=")
+	builder.WriteString(fmt.Sprintf("%v", w.LanguageID))
 	builder.WriteString(", link=")
 	builder.WriteString(w.Link)
 	builder.WriteString(", priority=")

@@ -28,12 +28,6 @@ func (iu *ImageUpdate) Where(ps ...predicate.Image) *ImageUpdate {
 	return iu
 }
 
-// SetSlug sets the "slug" field.
-func (iu *ImageUpdate) SetSlug(s string) *ImageUpdate {
-	iu.mutation.SetSlug(s)
-	return iu
-}
-
 // SetPath sets the "path" field.
 func (iu *ImageUpdate) SetPath(s string) *ImageUpdate {
 	iu.mutation.SetPath(s)
@@ -136,11 +130,6 @@ func (iu *ImageUpdate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (iu *ImageUpdate) check() error {
-	if v, ok := iu.mutation.Slug(); ok {
-		if err := image.SlugValidator(v); err != nil {
-			return &ValidationError{Name: "slug", err: fmt.Errorf(`ent: validator failed for field "Image.slug": %w`, err)}
-		}
-	}
 	if v, ok := iu.mutation.Path(); ok {
 		if err := image.PathValidator(v); err != nil {
 			return &ValidationError{Name: "path", err: fmt.Errorf(`ent: validator failed for field "Image.path": %w`, err)}
@@ -166,13 +155,6 @@ func (iu *ImageUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := iu.mutation.Slug(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: image.FieldSlug,
-		})
 	}
 	if value, ok := iu.mutation.Path(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
@@ -212,12 +194,6 @@ type ImageUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *ImageMutation
-}
-
-// SetSlug sets the "slug" field.
-func (iuo *ImageUpdateOne) SetSlug(s string) *ImageUpdateOne {
-	iuo.mutation.SetSlug(s)
-	return iuo
 }
 
 // SetPath sets the "path" field.
@@ -329,11 +305,6 @@ func (iuo *ImageUpdateOne) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (iuo *ImageUpdateOne) check() error {
-	if v, ok := iuo.mutation.Slug(); ok {
-		if err := image.SlugValidator(v); err != nil {
-			return &ValidationError{Name: "slug", err: fmt.Errorf(`ent: validator failed for field "Image.slug": %w`, err)}
-		}
-	}
 	if v, ok := iuo.mutation.Path(); ok {
 		if err := image.PathValidator(v); err != nil {
 			return &ValidationError{Name: "path", err: fmt.Errorf(`ent: validator failed for field "Image.path": %w`, err)}
@@ -376,13 +347,6 @@ func (iuo *ImageUpdateOne) sqlSave(ctx context.Context) (_node *Image, err error
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := iuo.mutation.Slug(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: image.FieldSlug,
-		})
 	}
 	if value, ok := iuo.mutation.Path(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{

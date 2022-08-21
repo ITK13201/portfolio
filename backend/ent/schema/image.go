@@ -24,7 +24,6 @@ func (Image) Annotations() []schema.Annotation {
 func (Image) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Unique().Immutable(),
-		field.String("slug").NotEmpty().Unique().StructTag("binding:\"required\""),
 		field.String("path").NotEmpty().StructTag("binding:\"required\""),
 		field.Time("created_at").Default(time.Now),
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),

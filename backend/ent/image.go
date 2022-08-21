@@ -16,8 +16,6 @@ type Image struct {
 	config `binding:"-" json:"-"`
 	// ID of the ent.
 	ID int64 `json:"id,omitempty"`
-	// Slug holds the value of the "slug" field.
-	Slug string `json:"slug,omitempty" binding:"required"`
 	// Path holds the value of the "path" field.
 	Path string `json:"path,omitempty" binding:"required"`
 	// CreatedAt holds the value of the "created_at" field.
@@ -33,7 +31,7 @@ func (*Image) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case image.FieldID:
 			values[i] = new(sql.NullInt64)
-		case image.FieldSlug, image.FieldPath:
+		case image.FieldPath:
 			values[i] = new(sql.NullString)
 		case image.FieldCreatedAt, image.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -58,12 +56,6 @@ func (i *Image) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			i.ID = int64(value.Int64)
-		case image.FieldSlug:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field slug", values[j])
-			} else if value.Valid {
-				i.Slug = value.String
-			}
 		case image.FieldPath:
 			if value, ok := values[j].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field path", values[j])
@@ -110,8 +102,6 @@ func (i *Image) String() string {
 	var builder strings.Builder
 	builder.WriteString("Image(")
 	builder.WriteString(fmt.Sprintf("id=%v", i.ID))
-	builder.WriteString(", slug=")
-	builder.WriteString(i.Slug)
 	builder.WriteString(", path=")
 	builder.WriteString(i.Path)
 	builder.WriteString(", created_at=")

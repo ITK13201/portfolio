@@ -11,6 +11,7 @@ import (
 
 	"github.com/ITK13201/portfolio/backend/ent/abouttopic"
 	"github.com/ITK13201/portfolio/backend/ent/image"
+	"github.com/ITK13201/portfolio/backend/ent/language"
 	"github.com/ITK13201/portfolio/backend/ent/predicate"
 	"github.com/ITK13201/portfolio/backend/ent/user"
 	"github.com/ITK13201/portfolio/backend/ent/work"
@@ -29,6 +30,7 @@ const (
 	// Node types.
 	TypeAboutTopic = "AboutTopic"
 	TypeImage      = "Image"
+	TypeLanguage   = "Language"
 	TypeUser       = "User"
 	TypeWork       = "Work"
 )
@@ -793,7 +795,6 @@ type ImageMutation struct {
 	op            Op
 	typ           string
 	id            *int64
-	slug          *string
 	_path         *string
 	created_at    *time.Time
 	updated_at    *time.Time
@@ -905,42 +906,6 @@ func (m *ImageMutation) IDs(ctx context.Context) ([]int64, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
-}
-
-// SetSlug sets the "slug" field.
-func (m *ImageMutation) SetSlug(s string) {
-	m.slug = &s
-}
-
-// Slug returns the value of the "slug" field in the mutation.
-func (m *ImageMutation) Slug() (r string, exists bool) {
-	v := m.slug
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldSlug returns the old "slug" field's value of the Image entity.
-// If the Image object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ImageMutation) OldSlug(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldSlug requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
-	}
-	return oldValue.Slug, nil
-}
-
-// ResetSlug resets all changes to the "slug" field.
-func (m *ImageMutation) ResetSlug() {
-	m.slug = nil
 }
 
 // SetPath sets the "path" field.
@@ -1070,10 +1035,7 @@ func (m *ImageMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ImageMutation) Fields() []string {
-	fields := make([]string, 0, 4)
-	if m.slug != nil {
-		fields = append(fields, image.FieldSlug)
-	}
+	fields := make([]string, 0, 3)
 	if m._path != nil {
 		fields = append(fields, image.FieldPath)
 	}
@@ -1091,8 +1053,6 @@ func (m *ImageMutation) Fields() []string {
 // schema.
 func (m *ImageMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case image.FieldSlug:
-		return m.Slug()
 	case image.FieldPath:
 		return m.Path()
 	case image.FieldCreatedAt:
@@ -1108,8 +1068,6 @@ func (m *ImageMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *ImageMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case image.FieldSlug:
-		return m.OldSlug(ctx)
 	case image.FieldPath:
 		return m.OldPath(ctx)
 	case image.FieldCreatedAt:
@@ -1125,13 +1083,6 @@ func (m *ImageMutation) OldField(ctx context.Context, name string) (ent.Value, e
 // type.
 func (m *ImageMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case image.FieldSlug:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetSlug(v)
-		return nil
 	case image.FieldPath:
 		v, ok := value.(string)
 		if !ok {
@@ -1202,9 +1153,6 @@ func (m *ImageMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *ImageMutation) ResetField(name string) error {
 	switch name {
-	case image.FieldSlug:
-		m.ResetSlug()
-		return nil
 	case image.FieldPath:
 		m.ResetPath()
 		return nil
@@ -1264,6 +1212,565 @@ func (m *ImageMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ImageMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Image edge %s", name)
+}
+
+// LanguageMutation represents an operation that mutates the Language nodes in the graph.
+type LanguageMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int64
+	name          *string
+	created_at    *time.Time
+	updated_at    *time.Time
+	clearedFields map[string]struct{}
+	image         *int64
+	clearedimage  bool
+	done          bool
+	oldValue      func(context.Context) (*Language, error)
+	predicates    []predicate.Language
+}
+
+var _ ent.Mutation = (*LanguageMutation)(nil)
+
+// languageOption allows management of the mutation configuration using functional options.
+type languageOption func(*LanguageMutation)
+
+// newLanguageMutation creates new mutation for the Language entity.
+func newLanguageMutation(c config, op Op, opts ...languageOption) *LanguageMutation {
+	m := &LanguageMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeLanguage,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withLanguageID sets the ID field of the mutation.
+func withLanguageID(id int64) languageOption {
+	return func(m *LanguageMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Language
+		)
+		m.oldValue = func(ctx context.Context) (*Language, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Language.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withLanguage sets the old Language of the mutation.
+func withLanguage(node *Language) languageOption {
+	return func(m *LanguageMutation) {
+		m.oldValue = func(context.Context) (*Language, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m LanguageMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m LanguageMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Language entities.
+func (m *LanguageMutation) SetID(id int64) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *LanguageMutation) ID() (id int64, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *LanguageMutation) IDs(ctx context.Context) ([]int64, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int64{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Language.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetName sets the "name" field.
+func (m *LanguageMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *LanguageMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Language entity.
+// If the Language object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LanguageMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *LanguageMutation) ResetName() {
+	m.name = nil
+}
+
+// SetImageID sets the "image_id" field.
+func (m *LanguageMutation) SetImageID(i int64) {
+	m.image = &i
+}
+
+// ImageID returns the value of the "image_id" field in the mutation.
+func (m *LanguageMutation) ImageID() (r int64, exists bool) {
+	v := m.image
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldImageID returns the old "image_id" field's value of the Language entity.
+// If the Language object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LanguageMutation) OldImageID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldImageID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldImageID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldImageID: %w", err)
+	}
+	return oldValue.ImageID, nil
+}
+
+// ClearImageID clears the value of the "image_id" field.
+func (m *LanguageMutation) ClearImageID() {
+	m.image = nil
+	m.clearedFields[language.FieldImageID] = struct{}{}
+}
+
+// ImageIDCleared returns if the "image_id" field was cleared in this mutation.
+func (m *LanguageMutation) ImageIDCleared() bool {
+	_, ok := m.clearedFields[language.FieldImageID]
+	return ok
+}
+
+// ResetImageID resets all changes to the "image_id" field.
+func (m *LanguageMutation) ResetImageID() {
+	m.image = nil
+	delete(m.clearedFields, language.FieldImageID)
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *LanguageMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *LanguageMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Language entity.
+// If the Language object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LanguageMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *LanguageMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *LanguageMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *LanguageMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Language entity.
+// If the Language object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LanguageMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *LanguageMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// ClearImage clears the "image" edge to the Image entity.
+func (m *LanguageMutation) ClearImage() {
+	m.clearedimage = true
+}
+
+// ImageCleared reports if the "image" edge to the Image entity was cleared.
+func (m *LanguageMutation) ImageCleared() bool {
+	return m.ImageIDCleared() || m.clearedimage
+}
+
+// ImageIDs returns the "image" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ImageID instead. It exists only for internal usage by the builders.
+func (m *LanguageMutation) ImageIDs() (ids []int64) {
+	if id := m.image; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetImage resets all changes to the "image" edge.
+func (m *LanguageMutation) ResetImage() {
+	m.image = nil
+	m.clearedimage = false
+}
+
+// Where appends a list predicates to the LanguageMutation builder.
+func (m *LanguageMutation) Where(ps ...predicate.Language) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *LanguageMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (Language).
+func (m *LanguageMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *LanguageMutation) Fields() []string {
+	fields := make([]string, 0, 4)
+	if m.name != nil {
+		fields = append(fields, language.FieldName)
+	}
+	if m.image != nil {
+		fields = append(fields, language.FieldImageID)
+	}
+	if m.created_at != nil {
+		fields = append(fields, language.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, language.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *LanguageMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case language.FieldName:
+		return m.Name()
+	case language.FieldImageID:
+		return m.ImageID()
+	case language.FieldCreatedAt:
+		return m.CreatedAt()
+	case language.FieldUpdatedAt:
+		return m.UpdatedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *LanguageMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case language.FieldName:
+		return m.OldName(ctx)
+	case language.FieldImageID:
+		return m.OldImageID(ctx)
+	case language.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case language.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown Language field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *LanguageMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case language.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case language.FieldImageID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetImageID(v)
+		return nil
+	case language.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case language.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Language field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *LanguageMutation) AddedFields() []string {
+	var fields []string
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *LanguageMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *LanguageMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Language numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *LanguageMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(language.FieldImageID) {
+		fields = append(fields, language.FieldImageID)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *LanguageMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *LanguageMutation) ClearField(name string) error {
+	switch name {
+	case language.FieldImageID:
+		m.ClearImageID()
+		return nil
+	}
+	return fmt.Errorf("unknown Language nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *LanguageMutation) ResetField(name string) error {
+	switch name {
+	case language.FieldName:
+		m.ResetName()
+		return nil
+	case language.FieldImageID:
+		m.ResetImageID()
+		return nil
+	case language.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case language.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown Language field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *LanguageMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.image != nil {
+		edges = append(edges, language.EdgeImage)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *LanguageMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case language.EdgeImage:
+		if id := m.image; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *LanguageMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *LanguageMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *LanguageMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedimage {
+		edges = append(edges, language.EdgeImage)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *LanguageMutation) EdgeCleared(name string) bool {
+	switch name {
+	case language.EdgeImage:
+		return m.clearedimage
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *LanguageMutation) ClearEdge(name string) error {
+	switch name {
+	case language.EdgeImage:
+		m.ClearImage()
+		return nil
+	}
+	return fmt.Errorf("unknown Language unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *LanguageMutation) ResetEdge(name string) error {
+	switch name {
+	case language.EdgeImage:
+		m.ResetImage()
+		return nil
+	}
+	return fmt.Errorf("unknown Language edge %s", name)
 }
 
 // UserMutation represents an operation that mutates the User nodes in the graph.
@@ -1748,23 +2255,23 @@ func (m *UserMutation) ResetEdge(name string) error {
 // WorkMutation represents an operation that mutates the Work nodes in the graph.
 type WorkMutation struct {
 	config
-	op             Op
-	typ            string
-	id             *int64
-	title          *string
-	description_jp *string
-	description_en *string
-	link           *string
-	priority       *int
-	addpriority    *int
-	created_at     *time.Time
-	updated_at     *time.Time
-	clearedFields  map[string]struct{}
-	image          *int64
-	clearedimage   bool
-	done           bool
-	oldValue       func(context.Context) (*Work, error)
-	predicates     []predicate.Work
+	op              Op
+	typ             string
+	id              *int64
+	title           *string
+	description_jp  *string
+	description_en  *string
+	link            *string
+	priority        *int
+	addpriority     *int
+	created_at      *time.Time
+	updated_at      *time.Time
+	clearedFields   map[string]struct{}
+	language        *int64
+	clearedlanguage bool
+	done            bool
+	oldValue        func(context.Context) (*Work, error)
+	predicates      []predicate.Work
 }
 
 var _ ent.Mutation = (*WorkMutation)(nil)
@@ -1979,53 +2486,53 @@ func (m *WorkMutation) ResetDescriptionEn() {
 	m.description_en = nil
 }
 
-// SetImageID sets the "image_id" field.
-func (m *WorkMutation) SetImageID(i int64) {
-	m.image = &i
+// SetLanguageID sets the "language_id" field.
+func (m *WorkMutation) SetLanguageID(i int64) {
+	m.language = &i
 }
 
-// ImageID returns the value of the "image_id" field in the mutation.
-func (m *WorkMutation) ImageID() (r int64, exists bool) {
-	v := m.image
+// LanguageID returns the value of the "language_id" field in the mutation.
+func (m *WorkMutation) LanguageID() (r int64, exists bool) {
+	v := m.language
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldImageID returns the old "image_id" field's value of the Work entity.
+// OldLanguageID returns the old "language_id" field's value of the Work entity.
 // If the Work object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *WorkMutation) OldImageID(ctx context.Context) (v int64, err error) {
+func (m *WorkMutation) OldLanguageID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldImageID is only allowed on UpdateOne operations")
+		return v, errors.New("OldLanguageID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldImageID requires an ID field in the mutation")
+		return v, errors.New("OldLanguageID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldImageID: %w", err)
+		return v, fmt.Errorf("querying old value for OldLanguageID: %w", err)
 	}
-	return oldValue.ImageID, nil
+	return oldValue.LanguageID, nil
 }
 
-// ClearImageID clears the value of the "image_id" field.
-func (m *WorkMutation) ClearImageID() {
-	m.image = nil
-	m.clearedFields[work.FieldImageID] = struct{}{}
+// ClearLanguageID clears the value of the "language_id" field.
+func (m *WorkMutation) ClearLanguageID() {
+	m.language = nil
+	m.clearedFields[work.FieldLanguageID] = struct{}{}
 }
 
-// ImageIDCleared returns if the "image_id" field was cleared in this mutation.
-func (m *WorkMutation) ImageIDCleared() bool {
-	_, ok := m.clearedFields[work.FieldImageID]
+// LanguageIDCleared returns if the "language_id" field was cleared in this mutation.
+func (m *WorkMutation) LanguageIDCleared() bool {
+	_, ok := m.clearedFields[work.FieldLanguageID]
 	return ok
 }
 
-// ResetImageID resets all changes to the "image_id" field.
-func (m *WorkMutation) ResetImageID() {
-	m.image = nil
-	delete(m.clearedFields, work.FieldImageID)
+// ResetLanguageID resets all changes to the "language_id" field.
+func (m *WorkMutation) ResetLanguageID() {
+	m.language = nil
+	delete(m.clearedFields, work.FieldLanguageID)
 }
 
 // SetLink sets the "link" field.
@@ -2192,30 +2699,30 @@ func (m *WorkMutation) ResetUpdatedAt() {
 	m.updated_at = nil
 }
 
-// ClearImage clears the "image" edge to the Image entity.
-func (m *WorkMutation) ClearImage() {
-	m.clearedimage = true
+// ClearLanguage clears the "language" edge to the Image entity.
+func (m *WorkMutation) ClearLanguage() {
+	m.clearedlanguage = true
 }
 
-// ImageCleared reports if the "image" edge to the Image entity was cleared.
-func (m *WorkMutation) ImageCleared() bool {
-	return m.ImageIDCleared() || m.clearedimage
+// LanguageCleared reports if the "language" edge to the Image entity was cleared.
+func (m *WorkMutation) LanguageCleared() bool {
+	return m.LanguageIDCleared() || m.clearedlanguage
 }
 
-// ImageIDs returns the "image" edge IDs in the mutation.
+// LanguageIDs returns the "language" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// ImageID instead. It exists only for internal usage by the builders.
-func (m *WorkMutation) ImageIDs() (ids []int64) {
-	if id := m.image; id != nil {
+// LanguageID instead. It exists only for internal usage by the builders.
+func (m *WorkMutation) LanguageIDs() (ids []int64) {
+	if id := m.language; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetImage resets all changes to the "image" edge.
-func (m *WorkMutation) ResetImage() {
-	m.image = nil
-	m.clearedimage = false
+// ResetLanguage resets all changes to the "language" edge.
+func (m *WorkMutation) ResetLanguage() {
+	m.language = nil
+	m.clearedlanguage = false
 }
 
 // Where appends a list predicates to the WorkMutation builder.
@@ -2247,8 +2754,8 @@ func (m *WorkMutation) Fields() []string {
 	if m.description_en != nil {
 		fields = append(fields, work.FieldDescriptionEn)
 	}
-	if m.image != nil {
-		fields = append(fields, work.FieldImageID)
+	if m.language != nil {
+		fields = append(fields, work.FieldLanguageID)
 	}
 	if m.link != nil {
 		fields = append(fields, work.FieldLink)
@@ -2276,8 +2783,8 @@ func (m *WorkMutation) Field(name string) (ent.Value, bool) {
 		return m.DescriptionJp()
 	case work.FieldDescriptionEn:
 		return m.DescriptionEn()
-	case work.FieldImageID:
-		return m.ImageID()
+	case work.FieldLanguageID:
+		return m.LanguageID()
 	case work.FieldLink:
 		return m.Link()
 	case work.FieldPriority:
@@ -2301,8 +2808,8 @@ func (m *WorkMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldDescriptionJp(ctx)
 	case work.FieldDescriptionEn:
 		return m.OldDescriptionEn(ctx)
-	case work.FieldImageID:
-		return m.OldImageID(ctx)
+	case work.FieldLanguageID:
+		return m.OldLanguageID(ctx)
 	case work.FieldLink:
 		return m.OldLink(ctx)
 	case work.FieldPriority:
@@ -2341,12 +2848,12 @@ func (m *WorkMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDescriptionEn(v)
 		return nil
-	case work.FieldImageID:
+	case work.FieldLanguageID:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetImageID(v)
+		m.SetLanguageID(v)
 		return nil
 	case work.FieldLink:
 		v, ok := value.(string)
@@ -2421,8 +2928,8 @@ func (m *WorkMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *WorkMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(work.FieldImageID) {
-		fields = append(fields, work.FieldImageID)
+	if m.FieldCleared(work.FieldLanguageID) {
+		fields = append(fields, work.FieldLanguageID)
 	}
 	return fields
 }
@@ -2438,8 +2945,8 @@ func (m *WorkMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *WorkMutation) ClearField(name string) error {
 	switch name {
-	case work.FieldImageID:
-		m.ClearImageID()
+	case work.FieldLanguageID:
+		m.ClearLanguageID()
 		return nil
 	}
 	return fmt.Errorf("unknown Work nullable field %s", name)
@@ -2458,8 +2965,8 @@ func (m *WorkMutation) ResetField(name string) error {
 	case work.FieldDescriptionEn:
 		m.ResetDescriptionEn()
 		return nil
-	case work.FieldImageID:
-		m.ResetImageID()
+	case work.FieldLanguageID:
+		m.ResetLanguageID()
 		return nil
 	case work.FieldLink:
 		m.ResetLink()
@@ -2480,8 +2987,8 @@ func (m *WorkMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *WorkMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.image != nil {
-		edges = append(edges, work.EdgeImage)
+	if m.language != nil {
+		edges = append(edges, work.EdgeLanguage)
 	}
 	return edges
 }
@@ -2490,8 +2997,8 @@ func (m *WorkMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *WorkMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case work.EdgeImage:
-		if id := m.image; id != nil {
+	case work.EdgeLanguage:
+		if id := m.language; id != nil {
 			return []ent.Value{*id}
 		}
 	}
@@ -2515,8 +3022,8 @@ func (m *WorkMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *WorkMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.clearedimage {
-		edges = append(edges, work.EdgeImage)
+	if m.clearedlanguage {
+		edges = append(edges, work.EdgeLanguage)
 	}
 	return edges
 }
@@ -2525,8 +3032,8 @@ func (m *WorkMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *WorkMutation) EdgeCleared(name string) bool {
 	switch name {
-	case work.EdgeImage:
-		return m.clearedimage
+	case work.EdgeLanguage:
+		return m.clearedlanguage
 	}
 	return false
 }
@@ -2535,8 +3042,8 @@ func (m *WorkMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *WorkMutation) ClearEdge(name string) error {
 	switch name {
-	case work.EdgeImage:
-		m.ClearImage()
+	case work.EdgeLanguage:
+		m.ClearLanguage()
 		return nil
 	}
 	return fmt.Errorf("unknown Work unique edge %s", name)
@@ -2546,8 +3053,8 @@ func (m *WorkMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *WorkMutation) ResetEdge(name string) error {
 	switch name {
-	case work.EdgeImage:
-		m.ResetImage()
+	case work.EdgeLanguage:
+		m.ResetLanguage()
 		return nil
 	}
 	return fmt.Errorf("unknown Work edge %s", name)

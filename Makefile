@@ -21,6 +21,10 @@ ent-add:
 	docker compose exec backend go run entgo.io/ent/cmd/ent init ${args}
 ent-gen:
 	docker compose exec backend go generate ./ent
+cobra-add:
+	docker compose exec backend cobra-cli add ${args}
+createsuperuser:
+	docker compose exec backend go run main.go job createsuperuser
 migrate:
 	docker compose exec backend goose.sh up
 rollback:

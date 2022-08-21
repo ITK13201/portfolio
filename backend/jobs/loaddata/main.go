@@ -51,6 +51,8 @@ func Run(cmd *cobra.Command, args []string) {
 		storeAboutTopics(data, sqlClient, ctx)
 	case "images":
 		storeImages(data, sqlClient, ctx)
+	case "languages":
+		storeLanguages(data, sqlClient, ctx)
 	}
 }
 
@@ -64,7 +66,7 @@ func storeWorks(data []map[string]string, sqlClient *ent.Client, ctx context.Con
 		title := entity["title"]
 		descJp := entity["description_jp"]
 		descEn := entity["description_en"]
-		image_id, err := strconv.ParseInt(entity["image_id"], 10, 64)
+		language_id, err := strconv.ParseInt(entity["language_id"], 10, 64)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -73,7 +75,7 @@ func storeWorks(data []map[string]string, sqlClient *ent.Client, ctx context.Con
 		if err != nil {
 			log.Fatal(err)
 		}
-		bulk[i] = sqlClient.Work.Create().SetID(id).SetTitle(title).SetDescriptionJp(descJp).SetDescriptionEn(descEn).SetImageID(image_id).SetLink(link).SetPriority(priority)
+		bulk[i] = sqlClient.Work.Create().SetID(id).SetTitle(title).SetDescriptionJp(descJp).SetDescriptionEn(descEn).SetLanguageID(language_id).SetLink(link).SetPriority(priority)
 	}
 	_, err := sqlClient.Work.CreateBulk(bulk...).Save(ctx)
 	if err != nil {
@@ -114,11 +116,27 @@ func storeImages(data []map[string]string, sqlClient *ent.Client, ctx context.Co
 		if err != nil {
 			log.Fatal(err)
 		}
-		slug := entity["slug"]
 		path := entity["path"]
-		bulk[i] = sqlClient.Image.Create().SetID(id).SetSlug(slug).SetPath(path)
+		bulk[i] = sqlClient.Image.Create().SetID(id).SetPath(path)
 	}
 	_, err := sqlClient.Image.CreateBulk(bulk...).Save(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func storeLanguages(data []map[string]string, sqlClient *ent.Client, ctx context.Context) {
+	bulk := make([]*ent.LanguageCreate, len(data))
+	for i, entity := range data {
+		id, err := strconv.ParseInt(entity["id"], 10, 64)
+		if err != nil {
+			log.Fatal(err)
+		}
+		name := entity["name"]
+		image_id, err := strconv.ParseInt(entity["image_id"], 10, 64)
+		bulk[i] = sqlClient.Language.Create().SetID(id).SetName(name).SetImageID(image_id)
+	}
+	_, err := sqlClient.Language.CreateBulk(bulk...).Save(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}

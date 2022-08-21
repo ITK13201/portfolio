@@ -17,8 +17,8 @@ const (
 	FieldDescriptionJp = "description_jp"
 	// FieldDescriptionEn holds the string denoting the description_en field in the database.
 	FieldDescriptionEn = "description_en"
-	// FieldImageID holds the string denoting the image_id field in the database.
-	FieldImageID = "image_id"
+	// FieldLanguageID holds the string denoting the language_id field in the database.
+	FieldLanguageID = "language_id"
 	// FieldLink holds the string denoting the link field in the database.
 	FieldLink = "link"
 	// FieldPriority holds the string denoting the priority field in the database.
@@ -27,17 +27,17 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
-	// EdgeImage holds the string denoting the image edge name in mutations.
-	EdgeImage = "image"
+	// EdgeLanguage holds the string denoting the language edge name in mutations.
+	EdgeLanguage = "language"
 	// Table holds the table name of the work in the database.
 	Table = "works"
-	// ImageTable is the table that holds the image relation/edge.
-	ImageTable = "works"
-	// ImageInverseTable is the table name for the Image entity.
+	// LanguageTable is the table that holds the language relation/edge.
+	LanguageTable = "works"
+	// LanguageInverseTable is the table name for the Image entity.
 	// It exists in this package in order to avoid circular dependency with the "image" package.
-	ImageInverseTable = "images"
-	// ImageColumn is the table column denoting the image relation/edge.
-	ImageColumn = "image_id"
+	LanguageInverseTable = "images"
+	// LanguageColumn is the table column denoting the language relation/edge.
+	LanguageColumn = "language_id"
 )
 
 // Columns holds all SQL columns for work fields.
@@ -46,7 +46,7 @@ var Columns = []string{
 	FieldTitle,
 	FieldDescriptionJp,
 	FieldDescriptionEn,
-	FieldImageID,
+	FieldLanguageID,
 	FieldLink,
 	FieldPriority,
 	FieldCreatedAt,

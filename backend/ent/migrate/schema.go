@@ -37,7 +37,6 @@ var (
 	// ImagesColumns holds the columns for the "images" table.
 	ImagesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "slug", Type: field.TypeString, Unique: true},
 		{Name: "path", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
@@ -47,6 +46,28 @@ var (
 		Name:       "images",
 		Columns:    ImagesColumns,
 		PrimaryKey: []*schema.Column{ImagesColumns[0]},
+	}
+	// LanguagesColumns holds the columns for the "languages" table.
+	LanguagesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "name", Type: field.TypeString, Unique: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "image_id", Type: field.TypeInt64, Nullable: true},
+	}
+	// LanguagesTable holds the schema information for the "languages" table.
+	LanguagesTable = &schema.Table{
+		Name:       "languages",
+		Columns:    LanguagesColumns,
+		PrimaryKey: []*schema.Column{LanguagesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "languages_images_image",
+				Columns:    []*schema.Column{LanguagesColumns[4]},
+				RefColumns: []*schema.Column{ImagesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
@@ -72,7 +93,7 @@ var (
 		{Name: "priority", Type: field.TypeInt},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "image_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "language_id", Type: field.TypeInt64, Nullable: true},
 	}
 	// WorksTable holds the schema information for the "works" table.
 	WorksTable = &schema.Table{
@@ -81,7 +102,7 @@ var (
 		PrimaryKey: []*schema.Column{WorksColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "works_images_image",
+				Symbol:     "works_images_language",
 				Columns:    []*schema.Column{WorksColumns[8]},
 				RefColumns: []*schema.Column{ImagesColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -92,6 +113,7 @@ var (
 	Tables = []*schema.Table{
 		AboutTopicsTable,
 		ImagesTable,
+		LanguagesTable,
 		UsersTable,
 		WorksTable,
 	}
@@ -104,6 +126,10 @@ func init() {
 	}
 	ImagesTable.Annotation = &entsql.Annotation{
 		Table: "images",
+	}
+	LanguagesTable.ForeignKeys[0].RefTable = ImagesTable
+	LanguagesTable.Annotation = &entsql.Annotation{
+		Table: "languages",
 	}
 	UsersTable.Annotation = &entsql.Annotation{
 		Table: "users",

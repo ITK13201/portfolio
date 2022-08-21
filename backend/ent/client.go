@@ -11,6 +11,7 @@ import (
 
 	"github.com/ITK13201/portfolio/backend/ent/abouttopic"
 	"github.com/ITK13201/portfolio/backend/ent/image"
+	"github.com/ITK13201/portfolio/backend/ent/language"
 	"github.com/ITK13201/portfolio/backend/ent/user"
 	"github.com/ITK13201/portfolio/backend/ent/work"
 
@@ -28,6 +29,8 @@ type Client struct {
 	AboutTopic *AboutTopicClient
 	// Image is the client for interacting with the Image builders.
 	Image *ImageClient
+	// Language is the client for interacting with the Language builders.
+	Language *LanguageClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 	// Work is the client for interacting with the Work builders.
@@ -47,6 +50,7 @@ func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.AboutTopic = NewAboutTopicClient(c.config)
 	c.Image = NewImageClient(c.config)
+	c.Language = NewLanguageClient(c.config)
 	c.User = NewUserClient(c.config)
 	c.Work = NewWorkClient(c.config)
 }
@@ -84,6 +88,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		config:     cfg,
 		AboutTopic: NewAboutTopicClient(cfg),
 		Image:      NewImageClient(cfg),
+		Language:   NewLanguageClient(cfg),
 		User:       NewUserClient(cfg),
 		Work:       NewWorkClient(cfg),
 	}, nil
@@ -107,6 +112,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		config:     cfg,
 		AboutTopic: NewAboutTopicClient(cfg),
 		Image:      NewImageClient(cfg),
+		Language:   NewLanguageClient(cfg),
 		User:       NewUserClient(cfg),
 		Work:       NewWorkClient(cfg),
 	}, nil
@@ -140,6 +146,7 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	c.AboutTopic.Use(hooks...)
 	c.Image.Use(hooks...)
+	c.Language.Use(hooks...)
 	c.User.Use(hooks...)
 	c.Work.Use(hooks...)
 }
@@ -340,6 +347,112 @@ func (c *ImageClient) Hooks() []Hook {
 	return c.hooks.Image
 }
 
+// LanguageClient is a client for the Language schema.
+type LanguageClient struct {
+	config
+}
+
+// NewLanguageClient returns a client for the Language from the given config.
+func NewLanguageClient(c config) *LanguageClient {
+	return &LanguageClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `language.Hooks(f(g(h())))`.
+func (c *LanguageClient) Use(hooks ...Hook) {
+	c.hooks.Language = append(c.hooks.Language, hooks...)
+}
+
+// Create returns a create builder for Language.
+func (c *LanguageClient) Create() *LanguageCreate {
+	mutation := newLanguageMutation(c.config, OpCreate)
+	return &LanguageCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Language entities.
+func (c *LanguageClient) CreateBulk(builders ...*LanguageCreate) *LanguageCreateBulk {
+	return &LanguageCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Language.
+func (c *LanguageClient) Update() *LanguageUpdate {
+	mutation := newLanguageMutation(c.config, OpUpdate)
+	return &LanguageUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *LanguageClient) UpdateOne(l *Language) *LanguageUpdateOne {
+	mutation := newLanguageMutation(c.config, OpUpdateOne, withLanguage(l))
+	return &LanguageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *LanguageClient) UpdateOneID(id int64) *LanguageUpdateOne {
+	mutation := newLanguageMutation(c.config, OpUpdateOne, withLanguageID(id))
+	return &LanguageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Language.
+func (c *LanguageClient) Delete() *LanguageDelete {
+	mutation := newLanguageMutation(c.config, OpDelete)
+	return &LanguageDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *LanguageClient) DeleteOne(l *Language) *LanguageDeleteOne {
+	return c.DeleteOneID(l.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *LanguageClient) DeleteOneID(id int64) *LanguageDeleteOne {
+	builder := c.Delete().Where(language.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &LanguageDeleteOne{builder}
+}
+
+// Query returns a query builder for Language.
+func (c *LanguageClient) Query() *LanguageQuery {
+	return &LanguageQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a Language entity by its id.
+func (c *LanguageClient) Get(ctx context.Context, id int64) (*Language, error) {
+	return c.Query().Where(language.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *LanguageClient) GetX(ctx context.Context, id int64) *Language {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryImage queries the image edge of a Language.
+func (c *LanguageClient) QueryImage(l *Language) *ImageQuery {
+	query := &ImageQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := l.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(language.Table, language.FieldID, id),
+			sqlgraph.To(image.Table, image.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, language.ImageTable, language.ImageColumn),
+		)
+		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *LanguageClient) Hooks() []Hook {
+	return c.hooks.Language
+}
+
 // UserClient is a client for the User schema.
 type UserClient struct {
 	config
@@ -515,15 +628,15 @@ func (c *WorkClient) GetX(ctx context.Context, id int64) *Work {
 	return obj
 }
 
-// QueryImage queries the image edge of a Work.
-func (c *WorkClient) QueryImage(w *Work) *ImageQuery {
+// QueryLanguage queries the language edge of a Work.
+func (c *WorkClient) QueryLanguage(w *Work) *ImageQuery {
 	query := &ImageQuery{config: c.config}
 	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
 		id := w.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(work.Table, work.FieldID, id),
 			sqlgraph.To(image.Table, image.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, work.ImageTable, work.ImageColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, work.LanguageTable, work.LanguageColumn),
 		)
 		fromV = sqlgraph.Neighbors(w.driver.Dialect(), step)
 		return fromV, nil

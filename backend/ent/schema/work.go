@@ -28,7 +28,7 @@ func (Work) Fields() []ent.Field {
 		field.String("title").NotEmpty().Unique().StructTag("binding:\"required\""),
 		field.String("description_jp").NotEmpty().StructTag("binding:\"required\""),
 		field.String("description_en").NotEmpty().StructTag("binding:\"required\""),
-		field.Int64("image_id").Optional(),
+		field.Int64("language_id").Optional(),
 		field.String("link").NotEmpty().StructTag("binding:\"required\""),
 		field.Int("priority").StructTag("binding:\"required\""),
 		field.Time("created_at").Default(time.Now),
@@ -39,6 +39,6 @@ func (Work) Fields() []ent.Field {
 // Edges of the Work.
 func (Work) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("image", Image.Type).Field("image_id").Unique(),
+		edge.To("language", Image.Type).Field("language_id").Unique(),
 	}
 }

@@ -7,6 +7,7 @@ import (
 
 	"github.com/ITK13201/portfolio/backend/ent/abouttopic"
 	"github.com/ITK13201/portfolio/backend/ent/image"
+	"github.com/ITK13201/portfolio/backend/ent/language"
 	"github.com/ITK13201/portfolio/backend/ent/schema"
 	"github.com/ITK13201/portfolio/backend/ent/user"
 	"github.com/ITK13201/portfolio/backend/ent/work"
@@ -42,24 +43,36 @@ func init() {
 	abouttopic.UpdateDefaultUpdatedAt = abouttopicDescUpdatedAt.UpdateDefault.(func() time.Time)
 	imageFields := schema.Image{}.Fields()
 	_ = imageFields
-	// imageDescSlug is the schema descriptor for slug field.
-	imageDescSlug := imageFields[1].Descriptor()
-	// image.SlugValidator is a validator for the "slug" field. It is called by the builders before save.
-	image.SlugValidator = imageDescSlug.Validators[0].(func(string) error)
 	// imageDescPath is the schema descriptor for path field.
-	imageDescPath := imageFields[2].Descriptor()
+	imageDescPath := imageFields[1].Descriptor()
 	// image.PathValidator is a validator for the "path" field. It is called by the builders before save.
 	image.PathValidator = imageDescPath.Validators[0].(func(string) error)
 	// imageDescCreatedAt is the schema descriptor for created_at field.
-	imageDescCreatedAt := imageFields[3].Descriptor()
+	imageDescCreatedAt := imageFields[2].Descriptor()
 	// image.DefaultCreatedAt holds the default value on creation for the created_at field.
 	image.DefaultCreatedAt = imageDescCreatedAt.Default.(func() time.Time)
 	// imageDescUpdatedAt is the schema descriptor for updated_at field.
-	imageDescUpdatedAt := imageFields[4].Descriptor()
+	imageDescUpdatedAt := imageFields[3].Descriptor()
 	// image.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	image.DefaultUpdatedAt = imageDescUpdatedAt.Default.(func() time.Time)
 	// image.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	image.UpdateDefaultUpdatedAt = imageDescUpdatedAt.UpdateDefault.(func() time.Time)
+	languageFields := schema.Language{}.Fields()
+	_ = languageFields
+	// languageDescName is the schema descriptor for name field.
+	languageDescName := languageFields[1].Descriptor()
+	// language.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	language.NameValidator = languageDescName.Validators[0].(func(string) error)
+	// languageDescCreatedAt is the schema descriptor for created_at field.
+	languageDescCreatedAt := languageFields[3].Descriptor()
+	// language.DefaultCreatedAt holds the default value on creation for the created_at field.
+	language.DefaultCreatedAt = languageDescCreatedAt.Default.(func() time.Time)
+	// languageDescUpdatedAt is the schema descriptor for updated_at field.
+	languageDescUpdatedAt := languageFields[4].Descriptor()
+	// language.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	language.DefaultUpdatedAt = languageDescUpdatedAt.Default.(func() time.Time)
+	// language.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	language.UpdateDefaultUpdatedAt = languageDescUpdatedAt.UpdateDefault.(func() time.Time)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescUsername is the schema descriptor for username field.

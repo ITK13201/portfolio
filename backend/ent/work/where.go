@@ -114,10 +114,10 @@ func DescriptionEn(v string) predicate.Work {
 	})
 }
 
-// ImageID applies equality check predicate on the "image_id" field. It's identical to ImageIDEQ.
-func ImageID(v int64) predicate.Work {
+// LanguageID applies equality check predicate on the "language_id" field. It's identical to LanguageIDEQ.
+func LanguageID(v int64) predicate.Work {
 	return predicate.Work(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldImageID), v))
+		s.Where(sql.EQ(s.C(FieldLanguageID), v))
 	})
 }
 
@@ -482,22 +482,22 @@ func DescriptionEnContainsFold(v string) predicate.Work {
 	})
 }
 
-// ImageIDEQ applies the EQ predicate on the "image_id" field.
-func ImageIDEQ(v int64) predicate.Work {
+// LanguageIDEQ applies the EQ predicate on the "language_id" field.
+func LanguageIDEQ(v int64) predicate.Work {
 	return predicate.Work(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldImageID), v))
+		s.Where(sql.EQ(s.C(FieldLanguageID), v))
 	})
 }
 
-// ImageIDNEQ applies the NEQ predicate on the "image_id" field.
-func ImageIDNEQ(v int64) predicate.Work {
+// LanguageIDNEQ applies the NEQ predicate on the "language_id" field.
+func LanguageIDNEQ(v int64) predicate.Work {
 	return predicate.Work(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldImageID), v))
+		s.Where(sql.NEQ(s.C(FieldLanguageID), v))
 	})
 }
 
-// ImageIDIn applies the In predicate on the "image_id" field.
-func ImageIDIn(vs ...int64) predicate.Work {
+// LanguageIDIn applies the In predicate on the "language_id" field.
+func LanguageIDIn(vs ...int64) predicate.Work {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -509,12 +509,12 @@ func ImageIDIn(vs ...int64) predicate.Work {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldImageID), v...))
+		s.Where(sql.In(s.C(FieldLanguageID), v...))
 	})
 }
 
-// ImageIDNotIn applies the NotIn predicate on the "image_id" field.
-func ImageIDNotIn(vs ...int64) predicate.Work {
+// LanguageIDNotIn applies the NotIn predicate on the "language_id" field.
+func LanguageIDNotIn(vs ...int64) predicate.Work {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -526,21 +526,21 @@ func ImageIDNotIn(vs ...int64) predicate.Work {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldImageID), v...))
+		s.Where(sql.NotIn(s.C(FieldLanguageID), v...))
 	})
 }
 
-// ImageIDIsNil applies the IsNil predicate on the "image_id" field.
-func ImageIDIsNil() predicate.Work {
+// LanguageIDIsNil applies the IsNil predicate on the "language_id" field.
+func LanguageIDIsNil() predicate.Work {
 	return predicate.Work(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldImageID)))
+		s.Where(sql.IsNull(s.C(FieldLanguageID)))
 	})
 }
 
-// ImageIDNotNil applies the NotNil predicate on the "image_id" field.
-func ImageIDNotNil() predicate.Work {
+// LanguageIDNotNil applies the NotNil predicate on the "language_id" field.
+func LanguageIDNotNil() predicate.Work {
 	return predicate.Work(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldImageID)))
+		s.Where(sql.NotNull(s.C(FieldLanguageID)))
 	})
 }
 
@@ -883,25 +883,25 @@ func UpdatedAtLTE(v time.Time) predicate.Work {
 	})
 }
 
-// HasImage applies the HasEdge predicate on the "image" edge.
-func HasImage() predicate.Work {
+// HasLanguage applies the HasEdge predicate on the "language" edge.
+func HasLanguage() predicate.Work {
 	return predicate.Work(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(ImageTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, ImageTable, ImageColumn),
+			sqlgraph.To(LanguageTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, LanguageTable, LanguageColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasImageWith applies the HasEdge predicate on the "image" edge with a given conditions (other predicates).
-func HasImageWith(preds ...predicate.Image) predicate.Work {
+// HasLanguageWith applies the HasEdge predicate on the "language" edge with a given conditions (other predicates).
+func HasLanguageWith(preds ...predicate.Image) predicate.Work {
 	return predicate.Work(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(ImageInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, ImageTable, ImageColumn),
+			sqlgraph.To(LanguageInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, LanguageTable, LanguageColumn),
 		)
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

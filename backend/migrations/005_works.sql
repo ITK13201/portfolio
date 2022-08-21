@@ -7,13 +7,13 @@ CREATE TABLE works
     description_jp VARCHAR(1024)           NOT NULL,
     description_en VARCHAR(1024)           NOT NULL DEFAULT '',
     link           VARCHAR(1024)           NOT NULL,
-    image_id       INTEGER                NOT NULL,
+    language_id       INTEGER                NOT NULL,
     priority       INTEGER                NOT NULL,
     created_at     DATETIME               NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at     DATETIME               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_works_image_id
-        FOREIGN KEY (image_id)
-            REFERENCES images (id)
+    CONSTRAINT fk_works_language_id
+        FOREIGN KEY (language_id)
+            REFERENCES languages (id)
             ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 -- +goose StatementEnd

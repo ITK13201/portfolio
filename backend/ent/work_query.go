@@ -26,7 +26,7 @@ type WorkQuery struct {
 	fields     []string
 	predicates []predicate.Work
 	// eager-loading edges.
-	withImage *ImageQuery
+	withLanguage *ImageQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -63,8 +63,8 @@ func (wq *WorkQuery) Order(o ...OrderFunc) *WorkQuery {
 	return wq
 }
 
-// QueryImage chains the current query on the "image" edge.
-func (wq *WorkQuery) QueryImage() *ImageQuery {
+// QueryLanguage chains the current query on the "language" edge.
+func (wq *WorkQuery) QueryLanguage() *ImageQuery {
 	query := &ImageQuery{config: wq.config}
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := wq.prepareQuery(ctx); err != nil {
@@ -77,7 +77,7 @@ func (wq *WorkQuery) QueryImage() *ImageQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(work.Table, work.FieldID, selector),
 			sqlgraph.To(image.Table, image.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, work.ImageTable, work.ImageColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, work.LanguageTable, work.LanguageColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(wq.driver.Dialect(), step)
 		return fromU, nil
@@ -261,12 +261,12 @@ func (wq *WorkQuery) Clone() *WorkQuery {
 		return nil
 	}
 	return &WorkQuery{
-		config:     wq.config,
-		limit:      wq.limit,
-		offset:     wq.offset,
-		order:      append([]OrderFunc{}, wq.order...),
-		predicates: append([]predicate.Work{}, wq.predicates...),
-		withImage:  wq.withImage.Clone(),
+		config:       wq.config,
+		limit:        wq.limit,
+		offset:       wq.offset,
+		order:        append([]OrderFunc{}, wq.order...),
+		predicates:   append([]predicate.Work{}, wq.predicates...),
+		withLanguage: wq.withLanguage.Clone(),
 		// clone intermediate query.
 		sql:    wq.sql.Clone(),
 		path:   wq.path,
@@ -274,14 +274,14 @@ func (wq *WorkQuery) Clone() *WorkQuery {
 	}
 }
 
-// WithImage tells the query-builder to eager-load the nodes that are connected to
-// the "image" edge. The optional arguments are used to configure the query builder of the edge.
-func (wq *WorkQuery) WithImage(opts ...func(*ImageQuery)) *WorkQuery {
+// WithLanguage tells the query-builder to eager-load the nodes that are connected to
+// the "language" edge. The optional arguments are used to configure the query builder of the edge.
+func (wq *WorkQuery) WithLanguage(opts ...func(*ImageQuery)) *WorkQuery {
 	query := &ImageQuery{config: wq.config}
 	for _, opt := range opts {
 		opt(query)
 	}
-	wq.withImage = query
+	wq.withLanguage = query
 	return wq
 }
 
@@ -351,7 +351,7 @@ func (wq *WorkQuery) sqlAll(ctx context.Context) ([]*Work, error) {
 		nodes       = []*Work{}
 		_spec       = wq.querySpec()
 		loadedTypes = [1]bool{
-			wq.withImage != nil,
+			wq.withLanguage != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]interface{}, error) {
@@ -374,11 +374,11 @@ func (wq *WorkQuery) sqlAll(ctx context.Context) ([]*Work, error) {
 		return nodes, nil
 	}
 
-	if query := wq.withImage; query != nil {
+	if query := wq.withLanguage; query != nil {
 		ids := make([]int64, 0, len(nodes))
 		nodeids := make(map[int64][]*Work)
 		for i := range nodes {
-			fk := nodes[i].ImageID
+			fk := nodes[i].LanguageID
 			if _, ok := nodeids[fk]; !ok {
 				ids = append(ids, fk)
 			}
@@ -392,10 +392,10 @@ func (wq *WorkQuery) sqlAll(ctx context.Context) ([]*Work, error) {
 		for _, n := range neighbors {
 			nodes, ok := nodeids[n.ID]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "image_id" returned %v`, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "language_id" returned %v`, n.ID)
 			}
 			for i := range nodes {
-				nodes[i].Edges.Image = n
+				nodes[i].Edges.Language = n
 			}
 		}
 	}

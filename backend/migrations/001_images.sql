@@ -3,7 +3,6 @@
 CREATE TABLE images
 (
     id         INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    slug       VARCHAR(64)            NOT NULL UNIQUE,
     path       VARCHAR(256)           NOT NULL,
     created_at DATETIME               NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME               NOT NULL DEFAULT CURRENT_TIMESTAMP

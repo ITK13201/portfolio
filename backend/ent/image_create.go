@@ -20,12 +20,6 @@ type ImageCreate struct {
 	hooks    []Hook
 }
 
-// SetSlug sets the "slug" field.
-func (ic *ImageCreate) SetSlug(s string) *ImageCreate {
-	ic.mutation.SetSlug(s)
-	return ic
-}
-
 // SetPath sets the "path" field.
 func (ic *ImageCreate) SetPath(s string) *ImageCreate {
 	ic.mutation.SetPath(s)
@@ -149,14 +143,6 @@ func (ic *ImageCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (ic *ImageCreate) check() error {
-	if _, ok := ic.mutation.Slug(); !ok {
-		return &ValidationError{Name: "slug", err: errors.New(`ent: missing required field "Image.slug"`)}
-	}
-	if v, ok := ic.mutation.Slug(); ok {
-		if err := image.SlugValidator(v); err != nil {
-			return &ValidationError{Name: "slug", err: fmt.Errorf(`ent: validator failed for field "Image.slug": %w`, err)}
-		}
-	}
 	if _, ok := ic.mutation.Path(); !ok {
 		return &ValidationError{Name: "path", err: errors.New(`ent: missing required field "Image.path"`)}
 	}
@@ -203,14 +189,6 @@ func (ic *ImageCreate) createSpec() (*Image, *sqlgraph.CreateSpec) {
 	if id, ok := ic.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
-	}
-	if value, ok := ic.mutation.Slug(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: image.FieldSlug,
-		})
-		_node.Slug = value
 	}
 	if value, ok := ic.mutation.Path(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

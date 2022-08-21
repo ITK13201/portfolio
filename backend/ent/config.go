@@ -26,6 +26,7 @@ type config struct {
 type hooks struct {
 	AboutTopic []ent.Hook
 	Image      []ent.Hook
+	Language   []ent.Hook
 	User       []ent.Hook
 	Work       []ent.Hook
 }

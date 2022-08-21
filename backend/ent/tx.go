@@ -16,6 +16,8 @@ type Tx struct {
 	AboutTopic *AboutTopicClient
 	// Image is the client for interacting with the Image builders.
 	Image *ImageClient
+	// Language is the client for interacting with the Language builders.
+	Language *LanguageClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 	// Work is the client for interacting with the Work builders.
@@ -157,6 +159,7 @@ func (tx *Tx) Client() *Client {
 func (tx *Tx) init() {
 	tx.AboutTopic = NewAboutTopicClient(tx.config)
 	tx.Image = NewImageClient(tx.config)
+	tx.Language = NewLanguageClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 	tx.Work = NewWorkClient(tx.config)
 }

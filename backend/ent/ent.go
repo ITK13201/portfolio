@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/ITK13201/portfolio/backend/ent/abouttopic"
 	"github.com/ITK13201/portfolio/backend/ent/image"
+	"github.com/ITK13201/portfolio/backend/ent/language"
 	"github.com/ITK13201/portfolio/backend/ent/user"
 	"github.com/ITK13201/portfolio/backend/ent/work"
 )
@@ -34,6 +35,7 @@ func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
 		abouttopic.Table: abouttopic.ValidColumn,
 		image.Table:      image.ValidColumn,
+		language.Table:   language.ValidColumn,
 		user.Table:       user.ValidColumn,
 		work.Table:       work.ValidColumn,
 	}

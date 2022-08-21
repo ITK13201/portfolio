@@ -47,23 +47,23 @@ func (wu *WorkUpdate) SetDescriptionEn(s string) *WorkUpdate {
 	return wu
 }
 
-// SetImageID sets the "image_id" field.
-func (wu *WorkUpdate) SetImageID(i int64) *WorkUpdate {
-	wu.mutation.SetImageID(i)
+// SetLanguageID sets the "language_id" field.
+func (wu *WorkUpdate) SetLanguageID(i int64) *WorkUpdate {
+	wu.mutation.SetLanguageID(i)
 	return wu
 }
 
-// SetNillableImageID sets the "image_id" field if the given value is not nil.
-func (wu *WorkUpdate) SetNillableImageID(i *int64) *WorkUpdate {
+// SetNillableLanguageID sets the "language_id" field if the given value is not nil.
+func (wu *WorkUpdate) SetNillableLanguageID(i *int64) *WorkUpdate {
 	if i != nil {
-		wu.SetImageID(*i)
+		wu.SetLanguageID(*i)
 	}
 	return wu
 }
 
-// ClearImageID clears the value of the "image_id" field.
-func (wu *WorkUpdate) ClearImageID() *WorkUpdate {
-	wu.mutation.ClearImageID()
+// ClearLanguageID clears the value of the "language_id" field.
+func (wu *WorkUpdate) ClearLanguageID() *WorkUpdate {
+	wu.mutation.ClearLanguageID()
 	return wu
 }
 
@@ -106,9 +106,9 @@ func (wu *WorkUpdate) SetUpdatedAt(t time.Time) *WorkUpdate {
 	return wu
 }
 
-// SetImage sets the "image" edge to the Image entity.
-func (wu *WorkUpdate) SetImage(i *Image) *WorkUpdate {
-	return wu.SetImageID(i.ID)
+// SetLanguage sets the "language" edge to the Image entity.
+func (wu *WorkUpdate) SetLanguage(i *Image) *WorkUpdate {
+	return wu.SetLanguageID(i.ID)
 }
 
 // Mutation returns the WorkMutation object of the builder.
@@ -116,9 +116,9 @@ func (wu *WorkUpdate) Mutation() *WorkMutation {
 	return wu.mutation
 }
 
-// ClearImage clears the "image" edge to the Image entity.
-func (wu *WorkUpdate) ClearImage() *WorkUpdate {
-	wu.mutation.ClearImage()
+// ClearLanguage clears the "language" edge to the Image entity.
+func (wu *WorkUpdate) ClearLanguage() *WorkUpdate {
+	wu.mutation.ClearLanguage()
 	return wu
 }
 
@@ -290,12 +290,12 @@ func (wu *WorkUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: work.FieldUpdatedAt,
 		})
 	}
-	if wu.mutation.ImageCleared() {
+	if wu.mutation.LanguageCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   work.ImageTable,
-			Columns: []string{work.ImageColumn},
+			Table:   work.LanguageTable,
+			Columns: []string{work.LanguageColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -306,12 +306,12 @@ func (wu *WorkUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := wu.mutation.ImageIDs(); len(nodes) > 0 {
+	if nodes := wu.mutation.LanguageIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   work.ImageTable,
-			Columns: []string{work.ImageColumn},
+			Table:   work.LanguageTable,
+			Columns: []string{work.LanguageColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -362,23 +362,23 @@ func (wuo *WorkUpdateOne) SetDescriptionEn(s string) *WorkUpdateOne {
 	return wuo
 }
 
-// SetImageID sets the "image_id" field.
-func (wuo *WorkUpdateOne) SetImageID(i int64) *WorkUpdateOne {
-	wuo.mutation.SetImageID(i)
+// SetLanguageID sets the "language_id" field.
+func (wuo *WorkUpdateOne) SetLanguageID(i int64) *WorkUpdateOne {
+	wuo.mutation.SetLanguageID(i)
 	return wuo
 }
 
-// SetNillableImageID sets the "image_id" field if the given value is not nil.
-func (wuo *WorkUpdateOne) SetNillableImageID(i *int64) *WorkUpdateOne {
+// SetNillableLanguageID sets the "language_id" field if the given value is not nil.
+func (wuo *WorkUpdateOne) SetNillableLanguageID(i *int64) *WorkUpdateOne {
 	if i != nil {
-		wuo.SetImageID(*i)
+		wuo.SetLanguageID(*i)
 	}
 	return wuo
 }
 
-// ClearImageID clears the value of the "image_id" field.
-func (wuo *WorkUpdateOne) ClearImageID() *WorkUpdateOne {
-	wuo.mutation.ClearImageID()
+// ClearLanguageID clears the value of the "language_id" field.
+func (wuo *WorkUpdateOne) ClearLanguageID() *WorkUpdateOne {
+	wuo.mutation.ClearLanguageID()
 	return wuo
 }
 
@@ -421,9 +421,9 @@ func (wuo *WorkUpdateOne) SetUpdatedAt(t time.Time) *WorkUpdateOne {
 	return wuo
 }
 
-// SetImage sets the "image" edge to the Image entity.
-func (wuo *WorkUpdateOne) SetImage(i *Image) *WorkUpdateOne {
-	return wuo.SetImageID(i.ID)
+// SetLanguage sets the "language" edge to the Image entity.
+func (wuo *WorkUpdateOne) SetLanguage(i *Image) *WorkUpdateOne {
+	return wuo.SetLanguageID(i.ID)
 }
 
 // Mutation returns the WorkMutation object of the builder.
@@ -431,9 +431,9 @@ func (wuo *WorkUpdateOne) Mutation() *WorkMutation {
 	return wuo.mutation
 }
 
-// ClearImage clears the "image" edge to the Image entity.
-func (wuo *WorkUpdateOne) ClearImage() *WorkUpdateOne {
-	wuo.mutation.ClearImage()
+// ClearLanguage clears the "language" edge to the Image entity.
+func (wuo *WorkUpdateOne) ClearLanguage() *WorkUpdateOne {
+	wuo.mutation.ClearLanguage()
 	return wuo
 }
 
@@ -629,12 +629,12 @@ func (wuo *WorkUpdateOne) sqlSave(ctx context.Context) (_node *Work, err error) 
 			Column: work.FieldUpdatedAt,
 		})
 	}
-	if wuo.mutation.ImageCleared() {
+	if wuo.mutation.LanguageCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   work.ImageTable,
-			Columns: []string{work.ImageColumn},
+			Table:   work.LanguageTable,
+			Columns: []string{work.LanguageColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -645,12 +645,12 @@ func (wuo *WorkUpdateOne) sqlSave(ctx context.Context) (_node *Work, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := wuo.mutation.ImageIDs(); len(nodes) > 0 {
+	if nodes := wuo.mutation.LanguageIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   work.ImageTable,
-			Columns: []string{work.ImageColumn},
+			Table:   work.LanguageTable,
+			Columns: []string{work.LanguageColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

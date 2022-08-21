@@ -11,8 +11,6 @@ const (
 	Label = "image"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldSlug holds the string denoting the slug field in the database.
-	FieldSlug = "slug"
 	// FieldPath holds the string denoting the path field in the database.
 	FieldPath = "path"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
@@ -26,7 +24,6 @@ const (
 // Columns holds all SQL columns for image fields.
 var Columns = []string{
 	FieldID,
-	FieldSlug,
 	FieldPath,
 	FieldCreatedAt,
 	FieldUpdatedAt,
@@ -43,8 +40,6 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// SlugValidator is a validator for the "slug" field. It is called by the builders before save.
-	SlugValidator func(string) error
 	// PathValidator is a validator for the "path" field. It is called by the builders before save.
 	PathValidator func(string) error
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.

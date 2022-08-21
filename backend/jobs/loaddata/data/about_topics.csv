@@ -1,8 +1,8 @@
 id,title,description_jp,description_en,image_id,priority
-1,Belong To,早稲田大学基幹理工学部情報理工学科（2019年〜2023年卒業予定）,Department of Information Science and Engineering,,
-2,Wanna be,Software and Web Engineer,Software and Web Engineer,2,2
+1,Belong To,早稲田大学基幹理工学部情報理工学科（2019年〜2023年卒業予定）,Department of Information Science and Engineering,4,1
+2,Wanna be,Software and Web Engineer,Software and Web Engineer,1,2
 3,Recent Activities,Go言語を使ったWebAPIの開発とC++で競技プログラミングの勉強を主に行っています．,I mainly develop WebAPI using Go language and study competitive programming in C++.,3,3
-4,Interested in,kubernetesを用いた本番環境の構築や，Go言語とNext.JSを連携させたWebアプリケーション開発に興味があります．,I am interested in building production environments using kubernetes and developing web applications that integrate the Go language and Next.JS.,4,4
+4,Interested in,kubernetesを用いた本番環境の構築や，Go言語とNext.JSを連携させたWebアプリケーション開発に興味があります．,I am interested in building production environments using kubernetes and developing web applications that integrate the Go language and Next.JS.,2,4
 5,Awards and Certifications,"- 普通自動車第一種運転免許（AT限定） 取得 [2022]
 - 応用情報技術者試験（AP） 合格 [2022]","- Class 1 ordinary driver's license (AT only) [2022]
-- Applied Information Technology Engineer Examination (AP) [2022] ",5,5
+- Applied Information Technology Engineer Examination (AP) [2022] ",11,5
