@@ -34,9 +34,6 @@ COPY ./backend/go.mod .
 COPY ./backend/go.sum .
 RUN go mod download
 
-COPY ./backend .
-COPY ./backend/bin /usr/local/bin
-
 COPY --from=tools /usr/local/bin/goose /bin/goose
 COPY --from=tools /usr/local/bin/air /bin/air
 COPY --from=tools /usr/local/bin/cobra-cli /bin/cobra-cli
@@ -44,6 +41,9 @@ COPY --from=tools /usr/local/bin/cobra-cli /bin/cobra-cli
 RUN groupadd -g 1000 golang \
     && useradd -m -s /bin/bash -u 1000 -g 1000 golang
 USER golang
+
+COPY --chown=golang:golang ./backend .
+COPY --chown=golang:golang ./backend/bin /usr/local/bin
 
 EXPOSE 8000
 

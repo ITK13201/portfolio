@@ -11,7 +11,9 @@ COPY ./frontend/package.json /frontend
 COPY ./frontend/yarn.lock /frontend
 RUN yarn install --frozen-lockfile
 
-COPY ./frontend /frontend
+USER node
+
+COPY --chown=node:node ./frontend /frontend
 
 CMD ["yarn", "dev"]
 
@@ -37,9 +39,9 @@ RUN apt-get update
 COPY --from=builder /frontend/package.json ./package.json
 COPY --from=builder /frontend/public ./public
 COPY --from=builder /frontend/node_modules ./node_modules
-COPY --from=builder --chown=nextjs:nodejs /frontend/.next ./.next
+COPY --from=builder --chown=node:node /frontend/.next ./.next
 COPY --from=builder /frontend/next.config.js ./next.config.js
 
-USER nextjs
+USER node
 
 CMD ["yarn", "start"]
