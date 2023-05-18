@@ -17,6 +17,7 @@ import JavaImage from 'assets/images/languages/java.png';
 import PythonImage from 'assets/images/languages/python.png';
 import TypescriptImage from 'assets/images/languages/typescript.png';
 import GolangImage from 'assets/images/languages/golang.png';
+import RubyImage from 'assets/images/languages/ruby.png'
 
 function ListItemLink(props: ListItemProps<'a', { button?: true }>) {
   return <ListItem button component="a" {...props} />;
@@ -86,6 +87,12 @@ const worksElements: worksElement[] = [
       'ホロライブというVirtual YouTuber事務所の配信スケジュールをWebサイトからスクレイピングにより取得し，Discordサーバーに通知する趣味用アプリケーションです．Go言語で作成しました．',
     imgSrc: GolangImage.src,
   },
+  {
+    href: 'https://github.com/backdoooor/schetify-api',
+    title: 'Schetify',
+    description: '食事会や飲み会などの幹事向け日程管理アプリケーションです．フロントエンドはFlutter，バックエンドはRuby on Railsで作成しています．また，これはOpen Hack U Tokyo 2022 というハッカソンで作成・発表したものです．',
+    imgSrc: RubyImage.src
+  }
 ];
 
 const Works = (): JSX.Element => {
