@@ -19,7 +19,7 @@ const EyeCatch = (): JSX.Element => {
           <strong>Takumi Ikeda</strong>
         </Typography>
         <Typography variant="h2" color="initial">
-          (handle name: I.TK, itk13201)
+          (handle name: ITK, itk13201)
         </Typography>
       </Box>
     </Box>

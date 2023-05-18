@@ -6,6 +6,7 @@ import {
   Interests as InterestsIcon,
   LocalActivity as LocalActivityIcon,
   School as SchoolIcon,
+  Work as WorkIcon,
   SvgIconComponent,
 } from '@mui/icons-material';
 import styles from 'assets/styles/components/home/About.module.scss';
@@ -21,7 +22,9 @@ const AboutElements: AboutElement[] = [
   {
     title: 'Belong To',
     titleIcon: SchoolIcon,
-    description: '早稲田大学基幹理工学部情報理工学科（2019年〜2023年卒業予定）',
+    description:
+        `- 早稲田大学基幹理工学部情報理工学科（2019年〜2023年卒業）
+        - 早稲田大学基幹理工学研究科情報理工・情報通信専攻（2023年〜2025年卒業）`,
   },
   {
     title: 'Wanna be',
@@ -43,7 +46,16 @@ const AboutElements: AboutElement[] = [
   {
     title: 'Awards and Certifications',
     titleIcon: EmojiEventsIcon,
-    description: '普通自動車第一種運転免許（AT限定） 取得',
+    description:
+        `- 普通自動車第一種運転免許（AT限定） 取得
+        - 応用情報技術者試験 合格`,
+  },
+  {
+    title: 'Career',
+    titleIcon: WorkIcon,
+    description:
+      `2020/12 - present: エヌ次元株式会社
+      2022/09, 3weeks: クックパッド株式会社`
   },
 ];
 
