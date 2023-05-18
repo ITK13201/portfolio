@@ -29,6 +29,16 @@ const languageSkills: SkillBarSkill[] = [
     },
   },
   {
+    type: 'Ruby',
+    level: 50,
+    color: {
+      bar: '#F266AB',
+      title: {
+        background: '#CC0000'
+      }
+    }
+  },
+  {
     type: 'Typescript',
     level: 50,
     color: {
@@ -76,6 +86,10 @@ const techSkills: SkillBarSkill[] = [
     level: 70,
   },
   {
+    type: 'Rails',
+    level: 50
+  },
+  {
     type: 'Next.js',
     level: 30,
   },
@@ -97,11 +111,19 @@ const techSkills: SkillBarSkill[] = [
   },
   {
     type: 'Kubernetes',
-    level: 0,
+    level: 30,
   },
   {
-    type: 'AWS(EC2/RDS)',
+    type: 'Terraform',
     level: 50,
+  },
+  {
+    type: 'AWS',
+    level: 50,
+  },
+  {
+    type: 'GCP',
+    level: 70
   },
   {
     type: 'Heroku',
@@ -152,7 +174,7 @@ const Skills = () => {
             <Typography variant="h3" className={styles.secondCaption}>
               Languages
             </Typography>
-            <SkillBar skills={languageSkills} />
+            <SkillBar skills={languageSkills}/>
           </Box>
           <Box className={styles.container}>
             <Typography variant="h3" className={styles.secondCaption}>
