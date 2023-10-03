@@ -34,25 +34,26 @@ const AboutElements: AboutElement[] = [
     title: 'Recent Activities',
     titleIcon: LocalActivityIcon,
     description:
-      'Go言語を使ったWebAPIの開発とC++で競技プログラミングの勉強を主に行っています．',
+      'Go言語を使ったWebAPIの開発を主に行っています．',
   },
   {
     title: 'Interested in',
     titleIcon: InterestsIcon,
     description:
-      'kubernetesを用いた本番環境の構築や，Go言語とNext.JSを連携させたWebアプリケーション開発に興味があります．',
+      'kubernetesを用いた本番環境の構築や，Go言語を用いたWebアプリケーション開発に興味があります．',
   },
   {
     title: 'Awards and Certifications',
     titleIcon: EmojiEventsIcon,
     description: `- 普通自動車第一種運転免許（AT限定） 取得
-        - 応用情報技術者試験 合格`,
+        - 応用情報技術者試験 (AP) 合格`,
   },
   {
     title: 'Career',
     titleIcon: WorkIcon,
-    description: `2020/12 - present: エヌ次元株式会社
-      2022/09, 3weeks: クックパッド株式会社`,
+    description: `2020/12 - present: エヌ次元株式会社 (アルバイト)
+      2022/09, 3 weeks: クックパッド株式会社 (就業型インターン)
+      2023/08-09, 3 weeks: ソニー株式会社`,
   },
 ];
 

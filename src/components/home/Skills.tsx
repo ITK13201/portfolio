@@ -20,7 +20,7 @@ const languageSkills: SkillBarSkill[] = [
   },
   {
     type: 'Go',
-    level: 50,
+    level: 60,
     color: {
       bar: '#3498DB',
       title: {
@@ -119,7 +119,7 @@ const techSkills: SkillBarSkill[] = [
   },
   {
     type: 'AWS',
-    level: 50,
+    level: 60,
   },
   {
     type: 'GCP',
